@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32407.343
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopMicroservices", "ShopMicroservices\ShopMicroservices.csproj", "{5277B6F2-BF3C-4EC6-9921-8DF45AEB1310}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservices", "Microservices", "{1C14131B-D95D-4917-9A69-F7C4BEB4144C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Category", "Category", "{F1C7E6E2-FABD-4E21-BB43-432E71A74754}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{AA10C559-0940-41C1-862F-D5B8BED96528}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CategoryMicroservice", "CategoryMicroservice\CategoryMicroservice.csproj", "{BADBC842-7C06-4B4B-AEC8-3478E0643F26}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5277B6F2-BF3C-4EC6-9921-8DF45AEB1310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5277B6F2-BF3C-4EC6-9921-8DF45AEB1310}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5277B6F2-BF3C-4EC6-9921-8DF45AEB1310}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5277B6F2-BF3C-4EC6-9921-8DF45AEB1310}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BADBC842-7C06-4B4B-AEC8-3478E0643F26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BADBC842-7C06-4B4B-AEC8-3478E0643F26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BADBC842-7C06-4B4B-AEC8-3478E0643F26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BADBC842-7C06-4B4B-AEC8-3478E0643F26}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F1C7E6E2-FABD-4E21-BB43-432E71A74754} = {1C14131B-D95D-4917-9A69-F7C4BEB4144C}
+		{AA10C559-0940-41C1-862F-D5B8BED96528} = {F1C7E6E2-FABD-4E21-BB43-432E71A74754}
+		{BADBC842-7C06-4B4B-AEC8-3478E0643F26} = {AA10C559-0940-41C1-862F-D5B8BED96528}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9D7A88B4-B546-4B2E-81B7-0C9B64883B6F}
+	EndGlobalSection
+EndGlobal
