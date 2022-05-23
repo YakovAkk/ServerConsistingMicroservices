@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace CategoryServices.Services.Base
 {
-    public abstract class BaseServiceForMongo<T> : IMongoService<T> where T : IModel
+    public abstract class BaseService<T> : IService<T> where T : IModel
     {
-        private readonly MongoDbBase<T> _repository;
-        public BaseServiceForMongo(MongoDbBase<T> repository)
+        private readonly RepositoryBase<T> _repository;
+        public BaseService(RepositoryBase<T> repository)
         {
             _repository = repository;
         }

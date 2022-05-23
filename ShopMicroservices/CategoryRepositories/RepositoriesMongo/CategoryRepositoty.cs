@@ -1,12 +1,17 @@
-﻿using CategoryData.Data.Models;
+﻿using CategoryData.Data.DatabaseNoSql;
+using CategoryData.Data.Models;
 using CategoryRepositories.RepositoriesMongo.Base;
 using MongoDB.Driver;
 
 
 namespace CategoryRepositories.RepositoriesMongo
 {
-    public class CategoryRepositoty : MongoDbBase<CategoryModel>
+    public class CategoryRepositoty : RepositoryBase<CategoryModel>
     {
+        public CategoryRepositoty(MongoDatabase<CategoryModel> mongoDatabase) : base(mongoDatabase)
+        {
+        }
+
         protected override IMongoCollection<CategoryModel> Collection { get; set; }
         public override async Task<CategoryModel> AddAsync(CategoryModel item)
         {

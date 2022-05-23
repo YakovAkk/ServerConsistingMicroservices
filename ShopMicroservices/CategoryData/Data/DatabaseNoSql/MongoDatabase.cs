@@ -1,21 +1,38 @@
-﻿using MongoDB.Driver;
+﻿using CategoryData.Attributes;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 
 namespace CategoryData.Data.DatabaseNoSql
 {
-    public class MongoDatabase
+    public class MongoDatabase<T>
     {
         private IMongoDatabase _db;
-        public MongoDatabase()
+        private IMongoCollection<T> Collection { get; set; }
+        public MongoDatabase(IOptions<LegoStoreDatabaseSettings> legoStoreDatabaseSettings)
         {
-            string _connectionString = "mongodb://localhost:27017/Lego";
+            string _connectionString = $"{legoStoreDatabaseSettings.Value.ConnectionString}/{legoStoreDatabaseSettings.Value.DatabaseName}";
             MongoUrlBuilder _connection = new MongoUrlBuilder(_connectionString);
             MongoClient _client = new MongoClient(_connectionString);
             _db = _client.GetDatabase(_connection.DatabaseName);
+            Collection = _db.GetCollection<T>(GetNameAtributes() == "" ? typeof(T).Name : GetNameAtributes());
         }
 
-        public IMongoDatabase GetConnectionToDB()
+        public IMongoCollection<T> GetCollection()
         {
-            return _db;
+            return Collection;
+        }
+
+        private string GetNameAtributes()
+        {
+            var type = typeof(T);
+
+            var atributes = type.GetCustomAttributes(typeof(NameCollectionAttribute), false);
+
+            foreach (NameCollectionAttribute atribute in atributes)
+            {
+                return atribute.CollectionName;
+            }
+            return "";
         }
     }
 }

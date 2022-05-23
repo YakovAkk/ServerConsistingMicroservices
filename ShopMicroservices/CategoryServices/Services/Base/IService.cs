@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CategoryServices.Services.Base
 {
-    public interface IMongoService<T>
+    public interface IService<T>
     {
         Task<T> AddAsync(T item);
         Task<T> UpdateAsync(T item);

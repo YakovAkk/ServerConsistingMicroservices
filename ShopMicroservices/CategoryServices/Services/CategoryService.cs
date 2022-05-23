@@ -5,9 +5,9 @@ using CategoryServices.Services.Base;
 
 namespace CategoryServices.Services
 {
-    public class CategoryService : BaseServiceForMongo<CategoryModel>
+    public class CategoryService : BaseService<CategoryModel>
     {
-        public CategoryService(MongoDbBase<CategoryModel> repository) : base(repository)
+        public CategoryService(RepositoryBase<CategoryModel> repository) : base(repository)
         {
 
         }

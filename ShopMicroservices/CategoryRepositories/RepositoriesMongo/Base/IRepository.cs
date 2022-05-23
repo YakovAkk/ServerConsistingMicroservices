@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CategoryRepositories.RepositoriesMongo.Base
 {
-    public interface IMongoDB<T>
+    public interface IRepository<T>
     {
         Task<List<T>> GetAllAsync();
         Task<T> GetByIDAsync(string id);

@@ -7,27 +7,15 @@ using MongoDB.Driver;
 
 namespace CategoryRepositories.RepositoriesMongo.Base
 {
-    public abstract class MongoDbBase<T> : IMongoDB<T> where T : IModel
+    public abstract class RepositoryBase<T> : IRepository<T> where T : IModel
     {
-        private readonly IMongoDatabase _db;
         abstract protected IMongoCollection<T> Collection { get; set; }
-        public MongoDbBase()
+        public RepositoryBase(MongoDatabase<T> mongoDatabase)
         {
-            _db = new MongoDatabase().GetConnectionToDB();
-            Collection = _db.GetCollection<T>(GetNameAtributes() == "" ? typeof(T).Name : GetNameAtributes());
+            Collection  = mongoDatabase.GetCollection();
+            
         }
-        public string GetNameAtributes()
-        {
-            var type = typeof(T);
-
-            var atributes = type.GetCustomAttributes(typeof(NameCollectionAttribute), false);
-
-            foreach (NameCollectionAttribute atribute in atributes)
-            {
-                return atribute.CollectionName;
-            }
-            return "";
-        }
+        
         public async virtual Task DeleteAsync(string id)
         {
             await Collection.DeleteOneAsync(i => i.Id == id);

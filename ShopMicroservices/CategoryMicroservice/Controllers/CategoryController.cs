@@ -10,9 +10,9 @@ namespace CategoryMicroservice.Controllers
     [AllowAnonymous]
     public class CategoryController : ControllerBase
     {
-        private readonly BaseServiceForMongo<CategoryModel> _categoryService;
+        private readonly BaseService<CategoryModel> _categoryService;
 
-        public CategoryController(BaseServiceForMongo<CategoryModel> categoryService)
+        public CategoryController(BaseService<CategoryModel> categoryService)
         {
             _categoryService = categoryService;
         }

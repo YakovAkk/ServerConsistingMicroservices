@@ -1,3 +1,4 @@
+using CategoryData.Data.DatabaseNoSql;
 using CategoryData.Data.Models;
 using CategoryRepositories.RepositoriesMongo;
 using CategoryRepositories.RepositoriesMongo.Base;
@@ -16,8 +17,13 @@ builder.Services.AddMvcCore(config =>
     config.Filters.Add(new AuthorizeFilter(policy));
 });
 
-builder.Services.AddTransient<MongoDbBase<CategoryModel>, CategoryRepositoty>();
-builder.Services.AddTransient<BaseServiceForMongo<CategoryModel>, CategoryService>();
+builder.Services.AddTransient<RepositoryBase<CategoryModel>, CategoryRepositoty>();
+builder.Services.AddTransient<BaseService<CategoryModel>, CategoryService>();
+
+builder.Services.Configure<LegoStoreDatabaseSettings>(
+    builder.Configuration.GetSection("LegoStoreDatabase"));
+
+builder.Services.AddSingleton<MongoDatabase<CategoryModel>>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
