@@ -1,3 +1,8 @@
+using CategoryData.Data.Models;
+using CategoryRepositories.RepositoriesMongo;
+using CategoryRepositories.RepositoriesMongo.Base;
+using CategoryServices.Services;
+using CategoryServices.Services.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 
@@ -10,6 +15,9 @@ builder.Services.AddMvcCore(config =>
     var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
     config.Filters.Add(new AuthorizeFilter(policy));
 });
+
+builder.Services.AddTransient<MongoDbBase<CategoryModel>, CategoryRepositoty>();
+builder.Services.AddTransient<BaseServiceForMongo<CategoryModel>, CategoryService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

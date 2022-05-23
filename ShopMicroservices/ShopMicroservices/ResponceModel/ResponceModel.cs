@@ -1,4 +1,4 @@
-﻿namespace CategoryMicroservice.Model
+﻿namespace ShopMicroservices.Model
 {
     public class ResponceModel
     {
