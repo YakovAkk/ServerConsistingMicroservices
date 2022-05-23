@@ -10,8 +10,8 @@ namespace CategoryServices.Services.Base
 {
     public abstract class BaseService<T> : IService<T> where T : IModel
     {
-        private readonly RepositoryBase<T> _repository;
-        public BaseService(RepositoryBase<T> repository)
+        private readonly ICategoryRepository _repository;
+        public BaseService(ICategoryRepository repository)
         {
             _repository = repository;
         }

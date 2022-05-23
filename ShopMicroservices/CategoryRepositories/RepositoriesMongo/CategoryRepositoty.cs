@@ -6,7 +6,7 @@ using MongoDB.Driver;
 
 namespace CategoryRepositories.RepositoriesMongo
 {
-    public class CategoryRepositoty : RepositoryBase<CategoryModel>
+    public class CategoryRepositoty : RepositoryBase<CategoryModel> , ICategoryRepository
     {
         public CategoryRepositoty(MongoDatabase<CategoryModel> mongoDatabase) : base(mongoDatabase)
         {

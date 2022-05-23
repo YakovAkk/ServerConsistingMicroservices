@@ -5,9 +5,9 @@ using CategoryServices.Services.Base;
 
 namespace CategoryServices.Services
 {
-    public class CategoryService : BaseService<CategoryModel>
+    public class CategoryService : BaseService<CategoryModel> , ICategoryService 
     {
-        public CategoryService(RepositoryBase<CategoryModel> repository) : base(repository)
+        public CategoryService(ICategoryRepository repository) : base(repository)
         {
 
         }

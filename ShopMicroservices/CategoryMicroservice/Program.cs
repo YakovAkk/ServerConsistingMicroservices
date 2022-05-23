@@ -17,8 +17,8 @@ builder.Services.AddMvcCore(config =>
     config.Filters.Add(new AuthorizeFilter(policy));
 });
 
-builder.Services.AddTransient<RepositoryBase<CategoryModel>, CategoryRepositoty>();
-builder.Services.AddTransient<BaseService<CategoryModel>, CategoryService>();
+builder.Services.AddTransient<ICategoryRepository, CategoryRepositoty>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
 
 builder.Services.Configure<LegoStoreDatabaseSettings>(
     builder.Configuration.GetSection("LegoStoreDatabase"));

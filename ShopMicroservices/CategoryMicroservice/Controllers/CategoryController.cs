@@ -10,9 +10,9 @@ namespace CategoryMicroservice.Controllers
     [AllowAnonymous]
     public class CategoryController : ControllerBase
     {
-        private readonly BaseService<CategoryModel> _categoryService;
+        private readonly ICategoryService _categoryService;
 
-        public CategoryController(BaseService<CategoryModel> categoryService)
+        public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
