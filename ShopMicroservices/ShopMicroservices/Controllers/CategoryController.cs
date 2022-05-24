@@ -28,10 +28,8 @@ namespace ShopMicroservices.Controllers
         [HttpPost("RabbitMQ")]
         public async Task<IActionResult> RabbitMQ(CategoryModelDTO model){
 
-            
-
-            Uri uri = new Uri(RabbitMqConsts.RabbitMqUri);
-            var endPoint = await _bus.GetSendEndpoint(uri);
+            //Uri uri = new Uri(RabbitMqConsts.RabbitMqUri + '/');
+            var endPoint = await _bus.GetSendEndpoint(_bus.Address);
             await endPoint.Send(model);
             return Ok();
         }

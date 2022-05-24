@@ -7,6 +7,7 @@ namespace ShopMicroservices.MassTransit
     {
         public Task Consume(ConsumeContext<IContract> context)
         {
+
             return Task.CompletedTask;
         }
     }
