@@ -13,7 +13,7 @@ builder.Services.AddMassTransit(x =>
 {
     x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
     {
-        config.Host(RabbitMqConsts.RabbitMqUri + "/", h =>
+        config.Host(RabbitMqConsts.RabbitMqRootUri + $"{RabbitMqConsts.VirtualHost}", h =>
         {
             h.Username(RabbitMqConsts.UserName);
             h.Password(RabbitMqConsts.Password);

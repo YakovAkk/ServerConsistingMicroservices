@@ -12,7 +12,7 @@ namespace ShopMicroservices.MyBus
         {
             bus = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
-                cfg.Host(new Uri(RabbitMqConsts.RabbitMqUri), h =>
+                cfg.Host(new Uri(RabbitMqConsts.RabbitMqRootUri), h =>
                 {
                     h.Username(RabbitMqConsts.UserName);
                     h.Password(RabbitMqConsts.Password);
