@@ -1,9 +1,26 @@
+using MassTransit;
+using MicrocerviceContract.Queue;
 using ShopMicroservices.httpClient.Base;
 using ShopMicroservices.HttpWorker;
+using ShopMicroservices.MassTransit;
+using ShopMicroservices.RabbitMq;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
+    {
+        config.Host(new Uri(RabbitMqConsts.RabbitMqUri), h =>
+        {
+            h.Username(RabbitMqConsts.UserName);
+            h.Password(RabbitMqConsts.Password);
+        });
+
+    }));
+});
 
 builder.Services.AddTransient<IHttpWorker, HttpWorker>();
 

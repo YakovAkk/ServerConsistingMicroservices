@@ -2,17 +2,17 @@
 
 namespace ShopMicroservices.Models
 {
-    public class CategoryModel : IModel
+    public class CategoryModelDTO : IModel
     {
         public string Name { get; set; }
         public string ImageUrl { get; set; }
 
-        public CategoryModel()
+        public CategoryModelDTO()
         {
 
         }
 
-        public CategoryModel(string? id, string name, string imageUrl, string? messageWhatWrong)
+        public CategoryModelDTO(string? id, string name, string imageUrl, string? messageWhatWrong)
         {
             Name = name;
             ImageUrl = imageUrl;

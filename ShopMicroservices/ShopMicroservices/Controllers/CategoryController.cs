@@ -1,26 +1,46 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MassTransit;
+using MicrocerviceContract.Queue;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ShopMicroservices.Controllers.Base;
 using ShopMicroservices.httpClient.Base;
+using ShopMicroservices.MassTransit;
 using ShopMicroservices.Models;
+using ShopMicroservices.MyBus;
+using ShopMicroservices.RabbitMq;
 
 namespace ShopMicroservices.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class CategoryController : MyControllerBase<CategoryModel>
+    public class CategoryController : MyControllerBase<CategoryModelDTO>
     {
-        public CategoryController(IHttpWorker httpWorker) : base(httpWorker)
+        private readonly IBus _bus;
+
+        public CategoryController(IHttpWorker httpWorker, IBus bus) : base(httpWorker)
         {
+            _bus = bus;
+        }
+
+        [HttpPost("RabbitMQ")]
+        public async Task<IActionResult> RabbitMQ(CategoryModelDTO model){
+
+            
+
+            Uri uri = new Uri(RabbitMqConsts.RabbitMqUri);
+            var endPoint = await _bus.GetSendEndpoint(uri);
+            await endPoint.Send(model);
+            return Ok();
         }
 
         [HttpPost]
-        public override async Task<IActionResult> Create(CategoryModel model)
+        public override async Task<IActionResult> Create(CategoryModelDTO model)
         {
             string data = JsonConvert.SerializeObject(model);
+
             var httpResponse = await _httpWorker.PostAsync(_urlStorage.CategoryApiUrl, data);
 
             if (httpResponse.IsSuccess)
@@ -71,7 +91,7 @@ namespace ShopMicroservices.Controllers
         }
 
         [HttpPut]
-        public override async Task<IActionResult> Update(CategoryModel model)
+        public override async Task<IActionResult> Update(CategoryModelDTO model)
         {
             string data = JsonConvert.SerializeObject(model);
             var httpResponse = await _httpWorker.UpdateAsync(_urlStorage.CategoryApiUrl, data);

@@ -1,15 +1,36 @@
 using CategoryData.Data.DatabaseNoSql;
 using CategoryData.Data.Models;
+using CategoryMicroservice.MassTransit;
+using CategoryMicroservice.RabbitMq;
 using CategoryRepositories.RepositoriesMongo;
 using CategoryRepositories.RepositoriesMongo.Base;
 using CategoryServices.Services;
 using CategoryServices.Services.Base;
+using MassTransit;
+using MicrocerviceContract.Queue;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<UserConsumer>();
+    x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
+    {
+        config.Host(new Uri(RabbitMqConsts.RabbitMqUri), h =>
+        {
+            h.Username(RabbitMqConsts.UserName);
+            h.Password(RabbitMqConsts.Password);
+        });
+        config.ReceiveEndpoint(ConstatsQueue.NotificationQueueNameCategories, ep =>
+        {
+            ep.ConfigureConsumer<UserConsumer>(provider);
+        });
+    }));
+});
 
 builder.Services.AddMvcCore(config =>
 {
