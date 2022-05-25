@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ShopMicroservices.Controllers.Base;
 using ShopMicroservices.httpClient.Base;
-using ShopMicroservices.MassTransit;
+
 using ShopMicroservices.Models;
 
 namespace ShopMicroservices.Controllers
@@ -15,34 +15,23 @@ namespace ShopMicroservices.Controllers
     [AllowAnonymous]
     public class CategoryController : MyControllerBase<CategoryModelDTO>
     {
-        private readonly IPublishEndpoint _publishEndpoint;
 
-        private CategoryConsumer _categoryConsumer;
-
-        public CategoryController(IHttpWorker httpWorker, IPublishEndpoint publishEndpoint) : base(httpWorker)
+        public CategoryController(IHttpWorker httpWorker ) : base(httpWorker)
         {
-            _publishEndpoint = publishEndpoint;
-            _categoryConsumer = new CategoryConsumer();
-           
         }
 
         [HttpPost]
         public override async Task<IActionResult> Create(CategoryModelDTO model)
         {
-            await _publishEndpoint.Publish<CategoryContractCreate>(model);
+            string data = JsonConvert.SerializeObject(model);
+            var httpResponse = await _httpWorker.PostAsync($"{_urlStorage.CategoryApiUrl}" , data);
 
-            CategoryContractCreate myCategory = new CategoryContractCreate();
-
-            _categoryConsumer.CategoryCreateEvent += (category) =>
+            if (httpResponse.IsSuccess)
             {
-                myCategory = category;
-            };
-
-            if (myCategory == null)
-            {
-                return BadRequest();
+                return Ok(httpResponse.Data);
             }
-            return Ok(myCategory);
+
+            return BadRequest(httpResponse);
         }
 
         [HttpDelete("{id}")]

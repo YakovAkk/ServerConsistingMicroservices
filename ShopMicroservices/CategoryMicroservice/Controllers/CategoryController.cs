@@ -2,6 +2,8 @@
 using CategoryServices.Services.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections;
+using System.Collections.Concurrent;
 
 namespace CategoryMicroservice.Controllers
 {
@@ -11,11 +13,9 @@ namespace CategoryMicroservice.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
-
         public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
-
         }
 
         [HttpPost]
@@ -29,12 +29,24 @@ namespace CategoryMicroservice.Controllers
             }
 
             return Ok(result);
+
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory([FromQuery] string Id)
         {
             await _categoryService.DeleteAsync(Id);
             return Ok();
+        }
+        
+        [HttpPut]
+        public async Task<IActionResult> UpdateCategory([FromBody] CategoryModel categoryModel)
+        {
+            var result = await _categoryService.UpdateAsync(categoryModel);
+            if (result.messageWhatWrong != null)
+            {
+                return BadRequest(result.messageWhatWrong);
+            }
+            return Ok(result);
         }
 
         [HttpGet("all")]
@@ -54,16 +66,6 @@ namespace CategoryMicroservice.Controllers
             return Ok(result);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateCategory([FromBody] CategoryModel categoryModel)
-        {
-            var result = await _categoryService.UpdateAsync(categoryModel);
-            if (result.messageWhatWrong != null)
-            {
-                return BadRequest(result.messageWhatWrong);
-            }
-            return Ok(result);
-        }
 
         [HttpGet("id")]
         public async Task<IActionResult> GetByIdCategory([FromQuery] string Id)

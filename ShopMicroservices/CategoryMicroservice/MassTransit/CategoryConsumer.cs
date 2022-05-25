@@ -29,7 +29,6 @@ namespace CategoryMicroservice.MassTransit
             {
                 await _publishEndpoint.Publish<CategoryContractCreate>(result);
             }
-
         }
     }
 }
