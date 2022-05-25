@@ -17,8 +17,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumer<UserConsumer>();
-    x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
+    x.AddConsumer<CategoryConsumer>();
+    x.UsingRabbitMq((ctx, config) =>
     {
         config.Host(RabbitMqConsts.RabbitMqRootUri + $"{RabbitMqConsts.VirtualHost}", h =>
         {
@@ -27,9 +27,12 @@ builder.Services.AddMassTransit(x =>
         });
         config.ReceiveEndpoint(ConstatsQueue.NotificationQueueNameCategories, ep =>
         {
-            ep.ConfigureConsumer<UserConsumer>(provider);
+            ep.ConfigureConsumer<CategoryConsumer>(ctx);
         });
-    }));
+
+        config.AutoStart = true;
+    });
+    
 });
 
 builder.Services.AddMvcCore(config =>

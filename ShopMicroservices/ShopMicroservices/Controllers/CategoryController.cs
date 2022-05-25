@@ -1,15 +1,12 @@
 ﻿using MassTransit;
-using MicrocerviceContract.Queue;
+using MicrocerviceContract.Contracts.CategoryContracts;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ShopMicroservices.Controllers.Base;
 using ShopMicroservices.httpClient.Base;
 using ShopMicroservices.MassTransit;
 using ShopMicroservices.Models;
-using ShopMicroservices.MyBus;
-using ShopMicroservices.RabbitMq;
 
 namespace ShopMicroservices.Controllers
 {
@@ -18,39 +15,34 @@ namespace ShopMicroservices.Controllers
     [AllowAnonymous]
     public class CategoryController : MyControllerBase<CategoryModelDTO>
     {
-        private readonly IBus _bus;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public CategoryController(IHttpWorker httpWorker, IBus bus) : base(httpWorker)
+        private CategoryConsumer _categoryConsumer;
+
+        public CategoryController(IHttpWorker httpWorker, IPublishEndpoint publishEndpoint) : base(httpWorker)
         {
-            _bus = bus;
-        }
-
-        [HttpPost("RabbitMQ")]
-        public async Task<IActionResult> RabbitMQ(CategoryModelDTO model){
-
-            //Uri uri = new Uri(RabbitMqConsts.RabbitMqUri + '/');
-            for (int i = 0; i < 10; i++)
-            {
-                var endPoint = await _bus.GetSendEndpoint(_bus.Address);
-                await endPoint.Send(model);
-            }
+            _publishEndpoint = publishEndpoint;
+            _categoryConsumer = new CategoryConsumer();
            
-            return Ok();
         }
 
         [HttpPost]
         public override async Task<IActionResult> Create(CategoryModelDTO model)
         {
-            string data = JsonConvert.SerializeObject(model);
+            await _publishEndpoint.Publish<CategoryContractCreate>(model);
 
-            var httpResponse = await _httpWorker.PostAsync(_urlStorage.CategoryApiUrl, data);
+            CategoryContractCreate myCategory = new CategoryContractCreate();
 
-            if (httpResponse.IsSuccess)
+            _categoryConsumer.CategoryCreateEvent += (category) =>
             {
-                return Ok(httpResponse.Data);
-            }
+                myCategory = category;
+            };
 
-            return BadRequest(httpResponse);
+            if (myCategory == null)
+            {
+                return BadRequest();
+            }
+            return Ok(myCategory);
         }
 
         [HttpDelete("{id}")]

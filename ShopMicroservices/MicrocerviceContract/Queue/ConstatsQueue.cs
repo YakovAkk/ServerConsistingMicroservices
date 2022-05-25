@@ -9,5 +9,6 @@ namespace MicrocerviceContract.Queue
     public class ConstatsQueue
     {
         public static string NotificationQueueNameCategories = "NotificationQueueNameCategories";
+        public static string NotificationQueueBUS = "NotificationQueueBUS";
     }
 }

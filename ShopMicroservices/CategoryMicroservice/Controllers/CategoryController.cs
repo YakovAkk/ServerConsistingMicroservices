@@ -15,6 +15,7 @@ namespace CategoryMicroservice.Controllers
         public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
+
         }
 
         [HttpPost]
