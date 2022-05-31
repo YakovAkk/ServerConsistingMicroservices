@@ -42,7 +42,7 @@ namespace ShopMicroservices.HttpWorker
 
         public async Task<ResponceModel> UpdateAsync(string url, string data)
         {
-            var content = new StringContent(data);
+            var content = new StringContent(data, Encoding.UTF8, "application/json");
             var resp = await _httpClient.PutAsync(url, content);
 
             var responceModel = new ResponceModel(resp.IsSuccessStatusCode, await resp.Content.ReadAsStringAsync());

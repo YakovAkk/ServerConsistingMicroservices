@@ -19,7 +19,7 @@ namespace CategoryRepositories.RepositoriesMongo
             {
                 var category = new CategoryModel();
 
-                category.messageWhatWrong = "Item was null";
+                category.MessageWhatWrong = "Item was null";
 
                 return category;
             }
@@ -34,7 +34,7 @@ namespace CategoryRepositories.RepositoriesMongo
             {
                 var category = new CategoryModel();
 
-                category.messageWhatWrong = "Can't add item to database";
+                category.MessageWhatWrong = "Can't add item to database";
 
                 return category;
             }
@@ -48,7 +48,7 @@ namespace CategoryRepositories.RepositoriesMongo
             {
                 var category = new CategoryModel();
 
-                category.messageWhatWrong = "Item was null";
+                category.MessageWhatWrong = "Item was null";
 
                 return category;
             }
@@ -59,7 +59,7 @@ namespace CategoryRepositories.RepositoriesMongo
             if (result == null)
             {
                 var category = new CategoryModel();
-                category.messageWhatWrong = " The element hasn't contained in database";
+                category.MessageWhatWrong = " The element hasn't contained in database";
                 return category;
             }
 
@@ -69,7 +69,7 @@ namespace CategoryRepositories.RepositoriesMongo
             {
                 var category = new CategoryModel();
 
-                category.messageWhatWrong = "Can't update item to database";
+                category.MessageWhatWrong = "Can't update item to database";
 
                 return category;
             }

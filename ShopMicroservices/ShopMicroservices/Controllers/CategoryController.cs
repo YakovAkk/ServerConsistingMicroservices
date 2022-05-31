@@ -1,5 +1,4 @@
-﻿using MassTransit;
-using MicrocerviceContract.Contracts.CategoryContracts;
+﻿
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -18,6 +17,7 @@ namespace ShopMicroservices.Controllers
 
         public CategoryController(IHttpWorker httpWorker ) : base(httpWorker)
         {
+
         }
 
         [HttpPost]
@@ -34,8 +34,8 @@ namespace ShopMicroservices.Controllers
             return BadRequest(httpResponse);
         }
 
-        [HttpDelete("{id}")]
-        public override async Task<IActionResult> Delete([FromQuery] string Id)
+        [HttpDelete("{Id}")]
+        public override async Task<IActionResult> Delete([FromRoute] string Id)
         {
             var httpResponse = await _httpWorker.DeleteAsync($"{_urlStorage.CategoryApiUrl}/{Id}");
 
@@ -60,8 +60,8 @@ namespace ShopMicroservices.Controllers
             return BadRequest(httpResponse);
         }
 
-        [HttpGet("{id}")]
-        public override async Task<IActionResult> GetById([FromQuery] string Id)
+        [HttpGet("{Id}")]
+        public override async Task<IActionResult> GetById([FromRoute] string Id)
         {
             var httpResponse = await _httpWorker.GetAsync($"{_urlStorage.CategoryApiUrl}/{Id}");
 

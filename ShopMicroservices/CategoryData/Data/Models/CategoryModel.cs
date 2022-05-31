@@ -13,7 +13,7 @@ namespace CategoryData.Data.Models
         public string? Id { get; set; }
         public string Name { get; set; }
         public string ImageUrl { get; set; }
-        public string? messageWhatWrong { get; set; }
+        public string? MessageWhatWrong { get; set; }
 
         public CategoryModel()
         {
@@ -25,7 +25,7 @@ namespace CategoryData.Data.Models
             Id = id;
             Name = name;
             ImageUrl = imageUrl;
-            this.messageWhatWrong = messageWhatWrong;
+            MessageWhatWrong = messageWhatWrong;
         }
     }
 }

@@ -1,13 +1,10 @@
-﻿using CategoryData.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Bus.MassTransit.Contracts;
+using CategoryData.Data.Models;
 
 namespace CategoryServices.Services.Base
 {
     public interface ICategoryService : IService<CategoryModel>
     {
+
     }
 }

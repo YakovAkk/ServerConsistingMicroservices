@@ -4,16 +4,16 @@
     {
         public readonly string CategoryApiUrl = "https://localhost:7264/api/Category";
 
-        private static MyUrlStorage instance;
+        private static MyUrlStorage Instance;
 
         private MyUrlStorage()
         { }
 
         public static MyUrlStorage getInstance()
         {
-            if (instance == null)
-                instance = new MyUrlStorage();
-            return instance;
+            if (Instance == null)
+                Instance = new MyUrlStorage();
+            return Instance;
         }
     }
 }

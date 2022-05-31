@@ -7,25 +7,25 @@ using System.Threading.Tasks;
 
 namespace MicrocerviceContract.Contracts.CategoryContracts
 {
-    public class CategoryContractCreate : IContract
+    public class CategoryContract : IContract
     {
         public string? Id { get; set ; }
         public string Name { get; set; }
         public string ImageUrl { get; set; }
         public string? messageWhatWrong { get ; set; }
 
-        public CategoryContractCreate()
+        public CategoryContract()
         {
 
         }
 
-        public CategoryContractCreate(string name, string imageUrl)
+        public CategoryContract(string name, string imageUrl)
         {
             Name = name;
             ImageUrl = imageUrl;
         }
 
-        public CategoryContractCreate(string? id, string name, string imageUrl, string? messageWhatWrong)
+        public CategoryContract(string? id, string name, string imageUrl, string? messageWhatWrong)
         {
             Id = id;
             Name = name;

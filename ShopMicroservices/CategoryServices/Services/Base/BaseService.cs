@@ -1,28 +1,23 @@
-﻿using CategoryData.Data.Models.Base;
+﻿
+using Bus.MassTransit.Contracts.Base;
+using Bus.MassTransit.Contracts.ContractsModel;
+using CategoryData.Data.Models.Base;
 using CategoryRepositories.RepositoriesMongo.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MassTransit;
+
 
 namespace CategoryServices.Services.Base
 {
-    public abstract class BaseService<T> : IService<T> where T : IModel
+    public abstract class BaseService<T> : IService<T> where T : IModel, new()
     {
-        private readonly IRepository<T> _repository; 
+        private readonly IRepository<T> _repository;
         public BaseService(IRepository<T> repository)
         {
             _repository = repository;
         }
-        public async Task<T> AddAsync(T item)
-        {
-            return await _repository.AddAsync(item);
-        }
-        public async Task DeleteAsync(string id)
-        {
-            await _repository.DeleteAsync(id);
-        }
+        public abstract Task<T> AddAsync(T item);
+        public abstract Task<T> DeleteAsync(string id);
+        public abstract Task<T> UpdateAsync(T item);
         public async Task<List<T>> GetAllAsync()
         {
             return await _repository.GetAllAsync();
@@ -30,10 +25,6 @@ namespace CategoryServices.Services.Base
         public async Task<T> GetByIDAsync(string id)
         {
             return await _repository.GetByIDAsync(id);
-        }
-        public async Task<T> UpdateAsync(T item)
-        {
-            return await _repository.UpdateAsync(item);
         }
     }
 }

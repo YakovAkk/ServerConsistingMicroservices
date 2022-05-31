@@ -1,9 +1,9 @@
-﻿using CategoryData.Data.Models;
+﻿using Bus.MassTransit.Contracts;
+using CategoryData.Data.Models;
 using CategoryServices.Services.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections;
-using System.Collections.Concurrent;
+
 
 namespace CategoryMicroservice.Controllers
 {
@@ -23,28 +23,35 @@ namespace CategoryMicroservice.Controllers
         {
             var result = await _categoryService.AddAsync(categoryModel);
 
-            if (result.messageWhatWrong != null)
+            if (result.MessageWhatWrong != null)
             {
-                return BadRequest(result.messageWhatWrong);
+                return BadRequest(result.MessageWhatWrong);
             }
 
             return Ok(result);
 
         }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory([FromQuery] string Id)
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteCategory([FromRoute] string Id)
         {
-            await _categoryService.DeleteAsync(Id);
-            return Ok();
+            var result = await _categoryService.DeleteAsync(Id);
+
+            if (result.MessageWhatWrong != null)
+            {
+                return BadRequest(result.MessageWhatWrong);
+            }
+            return Ok(result);
+
         }
         
         [HttpPut]
         public async Task<IActionResult> UpdateCategory([FromBody] CategoryModel categoryModel)
         {
             var result = await _categoryService.UpdateAsync(categoryModel);
-            if (result.messageWhatWrong != null)
+
+            if (result.MessageWhatWrong != null)
             {
-                return BadRequest(result.messageWhatWrong);
+                return BadRequest(result.MessageWhatWrong);
             }
             return Ok(result);
         }
@@ -62,18 +69,17 @@ namespace CategoryMicroservice.Controllers
                 };
                 return BadRequest(message);
             }
-
             return Ok(result);
         }
 
 
-        [HttpGet("id")]
-        public async Task<IActionResult> GetByIdCategory([FromQuery] string Id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetByIdCategory([FromRoute] string Id)
         {
             var result = await _categoryService.GetByIDAsync(Id);
-            if (result.messageWhatWrong != null)
+            if (result.MessageWhatWrong != null)
             {
-                return BadRequest(result.messageWhatWrong);
+                return BadRequest(result.MessageWhatWrong);
             }
             return Ok(result);
         }

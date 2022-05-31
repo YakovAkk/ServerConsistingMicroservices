@@ -1,5 +1,4 @@
 using MassTransit;
-using MicrocerviceContract.Queue;
 using ShopMicroservices.httpClient.Base;
 using ShopMicroservices.HttpWorker;
 

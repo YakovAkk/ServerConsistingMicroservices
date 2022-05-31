@@ -1,15 +1,17 @@
 using CategoryData.Data.DatabaseNoSql;
 using CategoryData.Data.Models;
-using CategoryMicroservice.MassTransit;
 using CategoryMicroservice.RabbitMq;
 using CategoryRepositories.RepositoriesMongo;
 using CategoryRepositories.RepositoriesMongo.Base;
 using CategoryServices.Services;
 using CategoryServices.Services.Base;
 using MassTransit;
-using MicrocerviceContract.Queue;
+using Bus.MassTransit.Consumers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Bus.MassTransit.Queues;
+
+using Bus.MassTransit.Contracts.ContractsModel;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +19,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumer<CategoryConsumer>();
+    x.AddConsumer<CreateConsumer>();
+    x.AddConsumer<UpdateConsumer>();
+    x.AddConsumer<DeleteConsumer>();
     x.UsingRabbitMq((ctx, config) =>
     {
         config.Host(RabbitMqConsts.RabbitMqRootUri + $"{RabbitMqConsts.VirtualHost}", h =>
@@ -25,14 +29,17 @@ builder.Services.AddMassTransit(x =>
             h.Username(RabbitMqConsts.UserName);
             h.Password(RabbitMqConsts.Password);
         });
-        config.ReceiveEndpoint(ConstatsQueue.NotificationQueueNameCategories, ep =>
+        config.ReceiveEndpoint(ContractsQueue.NotificationQueueNameCategories, ep =>
         {
-            ep.ConfigureConsumer<CategoryConsumer>(ctx);
+            ep.ConfigureConsumer<UpdateConsumer>(ctx);
+            ep.ConfigureConsumer<CreateConsumer>(ctx);
+            ep.ConfigureConsumer<DeleteConsumer>(ctx);
         });
-
         config.AutoStart = true;
     });
-    
+    x.AddRequestClient<CategoryContractCreate>();
+    x.AddRequestClient<CategoryContractUpdate>();
+    x.AddRequestClient<CategoryContractDelete>();
 });
 
 builder.Services.AddMvcCore(config =>
@@ -44,8 +51,7 @@ builder.Services.AddMvcCore(config =>
 builder.Services.AddTransient<ICategoryRepository, CategoryRepositoty>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 
-builder.Services.Configure<LegoStoreDatabaseSettings>(
-    builder.Configuration.GetSection("LegoStoreDatabase"));
+builder.Services.Configure<LegoStoreDatabaseSettings>(builder.Configuration.GetSection("LegoStoreDatabase"));
 
 builder.Services.AddSingleton<MongoDatabase<CategoryModel>>();
 

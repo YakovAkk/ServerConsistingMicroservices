@@ -16,9 +16,9 @@ namespace ShopMicroservices.Controllers.Base
         }
 
         public abstract Task<IActionResult> GetAll();
-        public abstract Task<IActionResult> GetById([FromQuery] string Id);
+        public abstract Task<IActionResult> GetById([FromRoute] string Id);
         public abstract Task<IActionResult> Create(T model);
         public abstract Task<IActionResult> Update(T model);
-        public abstract Task<IActionResult> Delete([FromQuery] string Id);
+        public abstract Task<IActionResult> Delete([FromRoute] string Id);
     }
 }

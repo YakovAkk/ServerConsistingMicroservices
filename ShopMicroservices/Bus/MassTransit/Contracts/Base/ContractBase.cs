@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CategoryData.Data.Models.Base
+namespace Bus.MassTransit.Contracts.Base
 {
-    public interface IModel
+    public class ContractBase
     {
         public string Id { get; set; }
-        public string Name { get; set; }
     }
 }

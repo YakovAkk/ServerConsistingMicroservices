@@ -18,8 +18,4 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MicrocerviceContract\MicrocerviceContract.csproj" />
-  </ItemGroup>
-
 </Project>
