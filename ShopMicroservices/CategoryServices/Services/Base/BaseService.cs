@@ -8,7 +8,7 @@ using MassTransit;
 
 namespace CategoryServices.Services.Base
 {
-    public abstract class BaseService<T> : IService<T> where T : IModel, new()
+    public abstract class BaseService<T> : IService<T> where T : IModel
     {
         private readonly IRepository<T> _repository;
         public BaseService(IRepository<T> repository)

@@ -3,6 +3,7 @@
     public class MyUrlStorage
     {
         public readonly string CategoryApiUrl = "https://localhost:7264/api/Category";
+        public readonly string AccountApiUrl = "https://localhost:7224/api/Account";
 
         private static MyUrlStorage Instance;
 

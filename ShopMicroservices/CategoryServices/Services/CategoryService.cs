@@ -1,5 +1,4 @@
-﻿using Bus.MassTransit.Contracts;
-using Bus.MassTransit.Contracts.Base;
+﻿
 using Bus.MassTransit.Contracts.ContractsModel;
 using CategoryData.Data.Models;
 using CategoryRepositories.RepositoriesMongo.Base;
@@ -18,7 +17,7 @@ namespace CategoryServices.Services
             ICategoryRepository repository,
             IRequestClient<CategoryContractCreate> clientCreate,
             IRequestClient<CategoryContractUpdate> clientUpdate, 
-            IRequestClient<CategoryContractDelete> clientDelete) : base( repository)
+            IRequestClient<CategoryContractDelete> clientDelete) : base(repository)
         {
             _clientCreate = clientCreate;
             _clientUpdate = clientUpdate;

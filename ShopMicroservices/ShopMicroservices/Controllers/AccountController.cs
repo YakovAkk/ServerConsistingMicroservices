@@ -1,29 +1,27 @@
-﻿
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using ShopMicroservices.ApiModels;
 using ShopMicroservices.Controllers.Base;
 using ShopMicroservices.httpClient.Base;
-using ShopMicroservices.Models;
 
 namespace ShopMicroservices.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class CategoryController : MyControllerBase<CategoryModelDTO>
+    public class AccountController : MyControllerBase<AccountModelDTO>
     {
-
-        public CategoryController(IHttpWorker httpWorker ) : base(httpWorker)
+        public AccountController(IHttpWorker httpWorker) : base(httpWorker)
         {
 
         }
 
         [HttpPost]
-        public override async Task<IActionResult> Create(CategoryModelDTO model)
+        public override async Task<IActionResult> Create(AccountModelDTO model)
         {
             string data = JsonConvert.SerializeObject(model);
-            var httpResponse = await _httpWorker.PostAsync($"{_urlStorage.CategoryApiUrl}" , data);
+            var httpResponse = await _httpWorker.PostAsync(data, $"{_urlStorage.AccountApiUrl}");
 
             if (httpResponse.IsSuccess)
             {
@@ -33,10 +31,10 @@ namespace ShopMicroservices.Controllers
             return BadRequest(httpResponse);
         }
 
-        [HttpDelete("{Id}")]
+        [HttpDelete]
         public override async Task<IActionResult> Delete([FromRoute] string Id)
         {
-            var httpResponse = await _httpWorker.DeleteAsync($"{_urlStorage.CategoryApiUrl}/{Id}");
+            var httpResponse = await _httpWorker.DeleteAsync($"{_urlStorage.AccountApiUrl}/{Id}");
 
             if (httpResponse.IsSuccess)
             {
@@ -49,7 +47,7 @@ namespace ShopMicroservices.Controllers
         [HttpGet("all")]
         public override async Task<IActionResult> GetAll()
         {
-            var httpResponse = await _httpWorker.GetAsync($"{_urlStorage.CategoryApiUrl}/all");
+            var httpResponse = await _httpWorker.GetAsync($"{_urlStorage.AccountApiUrl}");
 
             if (httpResponse.IsSuccess)
             {
@@ -62,7 +60,7 @@ namespace ShopMicroservices.Controllers
         [HttpGet("{Id}")]
         public override async Task<IActionResult> GetById([FromRoute] string Id)
         {
-            var httpResponse = await _httpWorker.GetAsync($"{_urlStorage.CategoryApiUrl}/{Id}");
+            var httpResponse = await _httpWorker.GetAsync($"{_urlStorage.AccountApiUrl}/{Id}");
 
             if (httpResponse.IsSuccess)
             {
@@ -73,10 +71,10 @@ namespace ShopMicroservices.Controllers
         }
 
         [HttpPut]
-        public override async Task<IActionResult> Update(CategoryModelDTO model)
+        public override async Task<IActionResult> Update(AccountModelDTO model)
         {
             string data = JsonConvert.SerializeObject(model);
-            var httpResponse = await _httpWorker.UpdateAsync(_urlStorage.CategoryApiUrl, data);
+            var httpResponse = await _httpWorker.UpdateAsync(data, $"{_urlStorage.AccountApiUrl}");
 
             if (httpResponse.IsSuccess)
             {
