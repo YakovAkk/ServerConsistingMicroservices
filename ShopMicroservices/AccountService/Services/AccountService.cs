@@ -15,7 +15,7 @@ namespace AccountService.Services
             _clientDelete = clientDelete;
             _accountRepository = accountRepository;
         }
-        public async Task<UserModel> DeleteUserByIdAsync(int id)
+        public async Task<UserModel> DeleteUserByIdAsync(string id)
         {
             var categoryId = new AccountContractLogin() { Id = id };
 
@@ -44,7 +44,7 @@ namespace AccountService.Services
         {
             return await _accountRepository.GetAllAsync();
         }
-        public async Task<UserModel> GetUserByIdAsync(int id)
+        public async Task<UserModel> GetUserByIdAsync(string id)
         {
             return await _accountRepository.GetUserById(id);
         }

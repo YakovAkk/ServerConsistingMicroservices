@@ -11,9 +11,9 @@ namespace AccountRepository.RepositorySql
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         public AccountRepository(
-             AppDBContent appDBContent,
              UserManager<IdentityUser> userManager,
-             SignInManager<IdentityUser> signInManager) : base(appDBContent)
+             SignInManager<IdentityUser> signInManager,
+             AppDBContent db) : base(db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -37,9 +37,31 @@ namespace AccountRepository.RepositorySql
 
             if (result.Succeeded)
             {
-                await _db.Users.AddAsync(item);
-                _db.SaveChanges();
-                return item;
+                var User = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
+
+                var userAddDb = new UserModel()
+                {
+                    Id = User.Id,
+                    Name = User.Email,
+                    NickName = User.UserName,
+                    Email = User.Email,
+                    Password = item.Password,
+                    RememberMe = false,
+                    MessageThatWrong = ""
+                };
+
+                try
+                {
+                    _db.Users.Add(userAddDb);
+                    await _db.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    
+                }
+                
+
+                return userAddDb;
             }
             else
             {
@@ -48,7 +70,7 @@ namespace AccountRepository.RepositorySql
 
                 foreach (var res in result.Errors)
                 {
-                    User.MessageThatWrong += res;
+                    User.MessageThatWrong += res.Description;
                     User.MessageThatWrong += "\n";
                 }
 
@@ -56,7 +78,7 @@ namespace AccountRepository.RepositorySql
             }
         }
 
-        public override async Task<UserModel> DeleteAsync(int id)
+        public override async Task<UserModel> DeleteAsync(string id)
         {
             if (id == null)
             {
@@ -108,7 +130,7 @@ namespace AccountRepository.RepositorySql
             return await _db.Users.ToListAsync();
         }
 
-        public override async Task<UserModel> GetUserById(int id)
+        public override async Task<UserModel> GetUserById(string id)
         {
             if (id == null)
             {
@@ -199,8 +221,7 @@ namespace AccountRepository.RepositorySql
 
             if (result.Succeeded)
             {
-                _db.Users.Update(item);
-                _db.SaveChanges();
+                
                 return item;
             }
             else
@@ -210,7 +231,7 @@ namespace AccountRepository.RepositorySql
 
                 foreach (var res in result.Errors)
                 {
-                    User.MessageThatWrong += res;
+                    User.MessageThatWrong += res.Description;
                     User.MessageThatWrong += "\n";
                 }
 

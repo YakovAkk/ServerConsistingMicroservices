@@ -26,6 +26,7 @@ namespace AccountService.Services
         {
             var user = new AccountContractRegistration()
             {
+                Id = item.Id,
                 Email = item.Email,
                 Name = item.Name,
                 Password = item.Password

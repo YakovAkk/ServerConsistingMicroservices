@@ -29,7 +29,7 @@ namespace AccountMicroservice.Controllers
         {
             var result = await _changeAccountService.RegistrationAsync(registrationUser);
 
-            if (result.MessageThatWrong != null)
+            if (result.MessageThatWrong != null && result.MessageThatWrong.Trim() != "")
             {
                 return BadRequest(result.MessageThatWrong);
             }
@@ -42,7 +42,7 @@ namespace AccountMicroservice.Controllers
         {
             var result = await _loginAccountService.LoginAsync(loginUser);
 
-            if (result.MessageThatWrong != null)
+            if (result.MessageThatWrong != null && result.MessageThatWrong.Trim() != "")
             {
                 return BadRequest(result.MessageThatWrong);
             }
@@ -63,7 +63,7 @@ namespace AccountMicroservice.Controllers
         {
             var result = await _changeAccountService.UpdateAsync(updateUser);
 
-            if (result.MessageThatWrong != null)
+            if (result.MessageThatWrong != null && result.MessageThatWrong.Trim() != "")
             {
                 return BadRequest(result.MessageThatWrong);
             }
@@ -72,18 +72,15 @@ namespace AccountMicroservice.Controllers
         }
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> getUserById([FromRoute] int Id)
+        public async Task<IActionResult> getUserById([FromRoute] string Id)
         {
             var result = await _accountService.GetUserByIdAsync(Id);
 
-            if (result == null)
+            if (result.MessageThatWrong != null && result.MessageThatWrong.Trim() != "")
             {
-                var message = new
-                {
-                    result = "Database hasn't any category"
-                };
-                return BadRequest(message);
+                return BadRequest(result.MessageThatWrong);
             }
+
             return Ok(result);
         }
 
@@ -103,18 +100,15 @@ namespace AccountMicroservice.Controllers
             return Ok(result);
         }
         [HttpDelete("{Id}")]
-        public async Task<IActionResult> deleteUser([FromRoute] int Id)
+        public async Task<IActionResult> deleteUser([FromRoute] string Id)
         {
             var result = await _accountService.DeleteUserByIdAsync(Id);
 
-            if (result == null)
+            if (result.MessageThatWrong != null && result.MessageThatWrong.Trim() != "")
             {
-                var message = new
-                {
-                    result = "Database hasn't any category"
-                };
-                return BadRequest(message);
+                return BadRequest(result.MessageThatWrong);
             }
+
             return Ok(result);
         }
     }

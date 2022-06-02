@@ -23,7 +23,7 @@ namespace CategoryMicroservice.Controllers
         {
             var result = await _categoryService.AddAsync(categoryModel);
 
-            if (result.MessageWhatWrong != null)
+            if (result.MessageWhatWrong != null && result.MessageWhatWrong.Trim() != "")
             {
                 return BadRequest(result.MessageWhatWrong);
             }
@@ -36,7 +36,7 @@ namespace CategoryMicroservice.Controllers
         {
             var result = await _categoryService.DeleteAsync(Id);
 
-            if (result.MessageWhatWrong != null)
+            if (result.MessageWhatWrong != null && result.MessageWhatWrong.Trim() != "")
             {
                 return BadRequest(result.MessageWhatWrong);
             }
@@ -49,7 +49,7 @@ namespace CategoryMicroservice.Controllers
         {
             var result = await _categoryService.UpdateAsync(categoryModel);
 
-            if (result.MessageWhatWrong != null)
+            if (result.MessageWhatWrong != null && result.MessageWhatWrong.Trim() != "")
             {
                 return BadRequest(result.MessageWhatWrong);
             }
@@ -77,7 +77,7 @@ namespace CategoryMicroservice.Controllers
         public async Task<IActionResult> GetByIdCategory([FromRoute] string Id)
         {
             var result = await _categoryService.GetByIDAsync(Id);
-            if (result.MessageWhatWrong != null)
+            if (result.MessageWhatWrong != null && result.MessageWhatWrong.Trim() != "")
             {
                 return BadRequest(result.MessageWhatWrong);
             }

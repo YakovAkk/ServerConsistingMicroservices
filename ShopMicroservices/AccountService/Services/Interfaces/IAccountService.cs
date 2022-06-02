@@ -12,7 +12,7 @@ namespace AccountService.Services.Interfaces
     {
         Task LogoutAsync();
         Task<List<UserModel>> GetAllAsync();
-        Task<UserModel> GetUserByIdAsync(int id);
-        Task<UserModel> DeleteUserByIdAsync(int id);
+        Task<UserModel> GetUserByIdAsync(string id);
+        Task<UserModel> DeleteUserByIdAsync(string id);
     }
 }

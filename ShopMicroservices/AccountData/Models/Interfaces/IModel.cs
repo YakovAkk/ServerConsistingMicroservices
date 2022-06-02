@@ -8,6 +8,6 @@ namespace AccountData.Models.Interfaces
 {
     public interface IModel
     {
-        public int? Id { get; set; }
+        public string? Id { get; set; }
     }
 }

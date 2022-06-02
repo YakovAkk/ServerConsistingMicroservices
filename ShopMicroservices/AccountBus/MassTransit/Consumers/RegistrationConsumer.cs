@@ -22,11 +22,11 @@ namespace AccountBus.MassTransit.Consumers
             {
                 Id = context.Message.Id,
                 Name = context.Message.Name,
-                NickName = context.Message.NickName,
+                NickName = context.Message.Name,
                 Email = context.Message.Email,
                 Password = context.Message.Password,
-                RememberMe = context.Message.RememberMe,
                 DataRegistration = context.Message.DataRegistration,
+                RememberMe = context.Message.RememberMe,
                 MessageThatWrong = context.Message.MessageThatWrong
             };
 
