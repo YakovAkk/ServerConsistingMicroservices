@@ -56,6 +56,32 @@ namespace AccountRepository.RepositorySql
             }
         }
 
+        public override async Task<UserModel> DeleteAsync(int id)
+        {
+            if (id == null)
+            {
+                var User = new UserModel();
+                User.MessageThatWrong = "Email was empty";
+                return User;
+            }
+
+            var result = await _db.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            try
+            {
+                _db.Remove(result);
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                var User = new UserModel();
+                User.MessageThatWrong = "The element hasn't contained in database";
+                return User;
+            }
+
+            return result;
+        }
+
         public override async Task<UserModel> FindUserByEmailAsync(string usersEmail)
         {
             if (usersEmail == null)
@@ -80,6 +106,27 @@ namespace AccountRepository.RepositorySql
         public override async Task<List<UserModel>> GetAllAsync()
         {
             return await _db.Users.ToListAsync();
+        }
+
+        public override async Task<UserModel> GetUserById(int id)
+        {
+            if (id == null)
+            {
+                var User = new UserModel();
+                User.MessageThatWrong = "Email was empty";
+                return User;
+            }
+
+            var result = await _db.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (result == null)
+            {
+                var User = new UserModel();
+                User.MessageThatWrong = "The element hasn't contained in database";
+                return User;
+            }
+
+            return result;
         }
 
         public override async Task<bool> isDataBaseHasUser(UserModel item)

@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Bus\Bus.csproj" />
+    <ProjectReference Include="..\Bus\CategoryBus.csproj" />
     <ProjectReference Include="..\CategoryRepositories\CategoryRepositories.csproj" />
   </ItemGroup>
 

@@ -15,5 +15,7 @@ namespace AccountRepository.RepositorySql.Base
         Task<bool> isDataBaseHasUser(T item);
         Task LogoutAsync();
         Task<T> UpdateAsync(T item);
+        Task<T> GetUserById(int id);
+        Task<T> DeleteAsync(int id);
     }
 }

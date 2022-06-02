@@ -9,6 +9,6 @@ namespace AccountRepository.RepositorySql.Base
 {
     public interface IAccountRepository : IRepository<UserModel>
     {
-
+        
     }
 }

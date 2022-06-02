@@ -1,9 +1,5 @@
-﻿
-using Bus.MassTransit.Contracts.Base;
-using Bus.MassTransit.Contracts.ContractsModel;
-using CategoryData.Data.Models.Base;
+﻿using CategoryData.Data.Models.Base;
 using CategoryRepositories.RepositoriesMongo.Base;
-using MassTransit;
 
 
 namespace CategoryServices.Services.Base

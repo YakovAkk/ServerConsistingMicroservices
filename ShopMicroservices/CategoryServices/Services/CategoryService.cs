@@ -44,7 +44,6 @@ namespace CategoryServices.Services
                 MessageWhatWrong = response.Message.MessageWhatWrong
             };
         }
-
         public override async Task<CategoryModel> DeleteAsync(string id)
         {
             var categoryId = new CategoryContractDelete() { Id = id };
@@ -67,7 +66,6 @@ namespace CategoryServices.Services
                 MessageWhatWrong = response.Message.MessageWhatWrong
             };
         }
-
         public override async Task<CategoryModel> UpdateAsync(CategoryModel item)
         {
             var response = await _clientUpdate.GetResponse<CategoryContractUpdate>(item);

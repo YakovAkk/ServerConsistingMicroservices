@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bus.MassTransit.Queues
 {
-    public class ContractsQueue
+    public class CategoryContractsQueue
     {
         public static string NotificationQueueNameCategories = "NotificationQueueNameCategories";
     }

@@ -1,4 +1,4 @@
-﻿using Bus.MassTransit.Contracts.Base;
+﻿
 
 
 namespace Bus.MassTransit.Contracts.ContractsModel

@@ -29,7 +29,7 @@ builder.Services.AddMassTransit(x =>
             h.Username(RabbitMqConsts.UserName);
             h.Password(RabbitMqConsts.Password);
         });
-        config.ReceiveEndpoint(ContractsQueue.NotificationQueueNameCategories, ep =>
+        config.ReceiveEndpoint(CategoryContractsQueue.NotificationQueueNameCategories, ep =>
         {
             ep.ConfigureConsumer<UpdateConsumer>(ctx);
             ep.ConfigureConsumer<CreateConsumer>(ctx);

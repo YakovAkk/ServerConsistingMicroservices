@@ -1,17 +1,52 @@
 using AccountData.Database;
-using AccountService.Services.Base;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using AccountRepository.RepositorySql.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Identity;
+using AccountService.Services.Interfaces;
+using AccountService.Services;
+using MassTransit;
+using AccountMicroservice.RabbitMq;
+using AccountBus.MassTransit.Queues;
+using AccountBus.MassTransit.Consumers;
+using AccountBus.MassTransit.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<DeleteConsumer>();
+    x.AddConsumer<RegistrationConsumer>();
+    x.AddConsumer<UpdateConsumer>();
+    x.UsingRabbitMq((ctx, config) =>
+    {
+        config.Host(RabbitMqConsts.RabbitMqRootUri + $"{RabbitMqConsts.VirtualHost}", h =>
+        {
+            h.Username(RabbitMqConsts.UserName);
+            h.Password(RabbitMqConsts.Password);
+        });
+        config.ReceiveEndpoint(AccountContractQueue.NotificationQueueNameAccount, ep =>
+        {
+            ep.ConfigureConsumer<DeleteConsumer>(ctx);
+            ep.ConfigureConsumer<RegistrationConsumer>(ctx);
+            ep.ConfigureConsumer<UpdateConsumer>(ctx);
+        });
+        config.AutoStart = true;
+    });
+    x.AddRequestClient<AccountContractLogin>();
+    x.AddRequestClient<AccountContractRegistration>();
+    x.AddRequestClient<AccountContractUpdate>();
+});
+
+
 builder.Services.AddTransient<IAccountService, AccountService.Services.AccountService>();
+builder.Services.AddTransient<IChangeAccountService, ChangeAccountService>();
+builder.Services.AddTransient<ILoginAccountService, LoginAccountService>();
+
 builder.Services.AddTransient<IAccountRepository, AccountRepository.RepositorySql.AccountRepository>();
 
 builder.Services.AddDbContext<AppDBContent>(options =>
