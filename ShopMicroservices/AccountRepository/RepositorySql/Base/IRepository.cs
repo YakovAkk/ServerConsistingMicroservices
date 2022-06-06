@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AccountRepository.RepositorySql.Base
+﻿namespace AccountRepository.RepositorySql.Base
 {
     public interface IRepository<T>
     {

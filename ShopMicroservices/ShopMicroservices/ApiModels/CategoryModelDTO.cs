@@ -2,7 +2,7 @@
 
 namespace ShopMicroservices.Models
 {
-    public class CategoryModelDTO : IModel
+    public class CategoryModelDTO : IModelDTO
     {
         public string? Id { get; set; }
         public string Name { get; set; }

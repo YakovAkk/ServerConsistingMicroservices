@@ -1,5 +1,4 @@
-﻿
-using Bus.MassTransit.Contracts.ContractsModel;
+﻿using Bus.MassTransit.Contracts.ContractsModel;
 using CategoryData.Data.Models;
 using CategoryRepositories.RepositoriesMongo.Base;
 using MassTransit;
@@ -28,6 +27,14 @@ namespace Bus.MassTransit.Consumers
                     await _publishEndpoint.Publish(data);
                     await context.RespondAsync<CategoryContractCreate>(data);
                 }
+            }
+            else
+            {
+                var responce = new CategoryContractCreate()
+                {
+                    MessageWhatWrong = "Database doens't contsin the element"
+                };
+                await _publishEndpoint.Publish(responce);
             }
         }
     }

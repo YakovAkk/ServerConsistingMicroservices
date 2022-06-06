@@ -4,7 +4,6 @@ using CategoryData.Data.Models.Base;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-
 namespace CategoryRepositories.RepositoriesMongo.Base
 {
     public abstract class RepositoryBase<T> : IRepository<T> where T : IModel
@@ -13,7 +12,6 @@ namespace CategoryRepositories.RepositoriesMongo.Base
         public RepositoryBase(MongoDatabase<T> mongoDatabase)
         {
             Collection  = mongoDatabase.GetCollection();
-            
         }
         
         public async virtual Task DeleteAsync(string id)

@@ -1,5 +1,4 @@
-﻿
-namespace Bus.MassTransit.Contracts.ContractsModel
+﻿namespace Bus.MassTransit.Contracts.ContractsModel
 {
     public class CategoryContractUpdate
     {

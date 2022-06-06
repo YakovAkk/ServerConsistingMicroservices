@@ -2,11 +2,6 @@
 using AccountData.Models;
 using AccountRepository.RepositorySql.Base;
 using MassTransit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AccountBus.MassTransit.Consumers
 {
@@ -38,10 +33,10 @@ namespace AccountBus.MassTransit.Consumers
 
             if (result != null)
             {
-                if (context.IsResponseAccepted<AccountContractRegistration>())
+                if (context.IsResponseAccepted<AccountContractUpdate>())
                 {
                     await _publishEndpoint.Publish(result);
-                    await context.RespondAsync<AccountContractRegistration>(result);
+                    await context.RespondAsync<AccountContractUpdate>(result);
                 }
             }
             else

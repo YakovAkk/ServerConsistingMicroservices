@@ -3,7 +3,7 @@ using ShopMicroservices.Models.Base;
 
 namespace ShopMicroservices.ApiModels
 {
-    public class AccountRegistrationModelDTO : IModel
+    public class AccountRegistrationModelDTO : IModelDTO
     {
         public string Name { get; set; }
         public string Email { get; set; }

@@ -1,6 +1,4 @@
-﻿
-
-namespace CategoryData.Attributes
+﻿namespace CategoryData.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class NameCollectionAttribute : Attribute

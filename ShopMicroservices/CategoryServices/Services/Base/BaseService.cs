@@ -1,7 +1,6 @@
 ﻿using CategoryData.Data.Models.Base;
 using CategoryRepositories.RepositoriesMongo.Base;
 
-
 namespace CategoryServices.Services.Base
 {
     public abstract class BaseService<T> : IService<T> where T : IModel

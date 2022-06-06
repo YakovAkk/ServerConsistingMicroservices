@@ -1,6 +1,5 @@
 ﻿using AccountBus.MassTransit.Contracts;
 using AccountData.Models;
-using AccountRepository.RepositorySql.Base;
 using AccountService.DTOs;
 using AccountService.Services.Interfaces;
 using MassTransit;

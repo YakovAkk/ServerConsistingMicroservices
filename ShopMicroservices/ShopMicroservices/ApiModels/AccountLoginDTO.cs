@@ -4,7 +4,7 @@ using ShopMicroservices.Models.Base;
 
 namespace ShopMicroservices.ApiModels
 {
-    public class AccountLoginDTO : IModel
+    public class AccountLoginDTO : IModelDTO
     {
         public string Name { get; set; }
         public string Password { get; set; }

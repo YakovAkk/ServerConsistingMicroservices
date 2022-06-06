@@ -5,16 +5,9 @@ using ShopMicroservices.UrlStorage;
 
 namespace ShopMicroservices.Controllers.Base
 {
-    public abstract class MyControllerBase<T>  : ControllerBase where T : IModel
+    public abstract class MyControllerBase<T>  : ControllerBase where T : IModelDTO
     {
-        protected readonly IHttpWorker _httpWorker;
-        protected readonly MyUrlStorage _urlStorage;
-        public MyControllerBase(IHttpWorker httpWorker)
-        {
-            _httpWorker = httpWorker;
-            _urlStorage = MyUrlStorage.getInstance();
-        }
-
+        public abstract IHttpWorker _httpWorker { get; set; }
         public abstract Task<IActionResult> GetAll();
         public abstract Task<IActionResult> GetById([FromRoute] string Id);
         public abstract Task<IActionResult> Create(T model);

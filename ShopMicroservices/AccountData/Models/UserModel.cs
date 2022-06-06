@@ -1,6 +1,4 @@
-﻿
-
-using AccountData.Models.Interfaces;
+﻿using AccountData.Models.Interfaces;
 
 namespace AccountData.Models
 {

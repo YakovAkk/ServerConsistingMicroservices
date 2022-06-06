@@ -3,7 +3,6 @@ using CategoryData.Data.Models;
 using CategoryRepositories.RepositoriesMongo.Base;
 using MongoDB.Driver;
 
-
 namespace CategoryRepositories.RepositoriesMongo
 {
     public class CategoryRepositoty : RepositoryBase<CategoryModel> , ICategoryRepository
@@ -43,7 +42,6 @@ namespace CategoryRepositories.RepositoriesMongo
         }
         public override async Task<CategoryModel> UpdateAsync(CategoryModel item)
         {
-
             if (item == null)
             {
                 var category = new CategoryModel();
@@ -68,16 +66,11 @@ namespace CategoryRepositories.RepositoriesMongo
             if (resultItem == null)
             {
                 var category = new CategoryModel();
-
                 category.MessageWhatWrong = "Can't update item to database";
-
                 return category;
             }
-
             return resultItem;
         }
-
-        
     }
 }
 

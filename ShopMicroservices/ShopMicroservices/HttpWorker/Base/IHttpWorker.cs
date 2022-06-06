@@ -1,12 +1,15 @@
-﻿using ShopMicroservices.Model;
+﻿using ShopMicroservices.Enum;
+using ShopMicroservices.Model;
+using ShopMicroservices.UrlStorage;
 
 namespace ShopMicroservices.httpClient.Base
 {
     public interface IHttpWorker
     {
-        Task<ResponceModel> GetAsync(string url);
-        Task<ResponceModel> PostAsync(string url , string data);
-        Task<ResponceModel> DeleteAsync(string url);
-        Task<ResponceModel> UpdateAsync(string url, string data);
+        public string ApiUrl { get; set; }
+        Task<ResponceModel> GetAsync(string methodUrl = "");
+        Task<ResponceModel> PostAsync(string data, string methodUrl = "");
+        Task<ResponceModel> DeleteAsync(string methodUrl = "");
+        Task<ResponceModel> UpdateAsync(string data, string methodUrl = "");
     }
 }

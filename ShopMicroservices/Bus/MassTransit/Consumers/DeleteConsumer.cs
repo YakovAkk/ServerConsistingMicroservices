@@ -1,11 +1,6 @@
 ﻿using Bus.MassTransit.Contracts.ContractsModel;
 using CategoryRepositories.RepositoriesMongo.Base;
 using MassTransit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bus.MassTransit.Consumers
 {
@@ -31,6 +26,14 @@ namespace Bus.MassTransit.Consumers
                     await _publishEndpoint.Publish(data);
                     await context.RespondAsync<CategoryContractDelete>(data);
                 }
+            }
+            else
+            {
+                var responce = new CategoryContractDelete()
+                {
+                    MessageWhatWrong = "Database doens't contsin the element"
+                };
+                await _publishEndpoint.Publish(responce);
             }
 
         }

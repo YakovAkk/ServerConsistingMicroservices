@@ -1,9 +1,7 @@
-﻿using Bus.MassTransit.Contracts;
-using CategoryData.Data.Models;
+﻿using CategoryData.Data.Models;
 using CategoryServices.Services.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace CategoryMicroservice.Controllers
 {

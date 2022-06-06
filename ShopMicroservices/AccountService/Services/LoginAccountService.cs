@@ -1,14 +1,8 @@
 ﻿using AccountBus.MassTransit.Contracts;
 using AccountData.Models;
-using AccountRepository.RepositorySql.Base;
 using AccountService.DTOs;
 using AccountService.Services.Interfaces;
 using MassTransit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AccountService.Services
 {

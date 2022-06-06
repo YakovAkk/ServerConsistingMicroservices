@@ -1,5 +1,4 @@
-﻿using AccountData.Models;
-using AccountService.DTOs;
+﻿using AccountService.DTOs;
 using AccountService.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

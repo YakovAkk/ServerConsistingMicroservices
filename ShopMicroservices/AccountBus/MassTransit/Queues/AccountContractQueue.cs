@@ -1,6 +1,4 @@
-﻿
-
-namespace AccountBus.MassTransit.Queues
+﻿namespace AccountBus.MassTransit.Queues
 {
     public class AccountContractQueue
     {

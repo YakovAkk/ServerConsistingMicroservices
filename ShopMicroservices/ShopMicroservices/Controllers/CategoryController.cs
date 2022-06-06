@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ShopMicroservices.Controllers.Base;
+using ShopMicroservices.Enum;
 using ShopMicroservices.httpClient.Base;
+using ShopMicroservices.HttpWorker;
 using ShopMicroservices.Models;
 
 namespace ShopMicroservices.Controllers
@@ -14,16 +16,17 @@ namespace ShopMicroservices.Controllers
     public class CategoryController : MyControllerBase<CategoryModelDTO>
     {
 
-        public CategoryController(IHttpWorker httpWorker ) : base(httpWorker)
+        public override IHttpWorker _httpWorker { get; set; }
+        public CategoryController()
         {
-
+            _httpWorker = new MyHttpWorker(UrlEnum.CategoryApiUrl);
         }
 
         [HttpPost]
         public override async Task<IActionResult> Create(CategoryModelDTO model)
         {
             string data = JsonConvert.SerializeObject(model);
-            var httpResponse = await _httpWorker.PostAsync($"{_urlStorage.CategoryApiUrl}" , data);
+            var httpResponse = await _httpWorker.PostAsync(data);
 
             if (httpResponse.IsSuccess)
             {
@@ -36,7 +39,7 @@ namespace ShopMicroservices.Controllers
         [HttpDelete("{Id}")]
         public override async Task<IActionResult> Delete([FromRoute] string Id)
         {
-            var httpResponse = await _httpWorker.DeleteAsync($"{_urlStorage.CategoryApiUrl}/{Id}");
+            var httpResponse = await _httpWorker.DeleteAsync($"{Id}");
 
             if (httpResponse.IsSuccess)
             {
@@ -49,7 +52,7 @@ namespace ShopMicroservices.Controllers
         [HttpGet("all")]
         public override async Task<IActionResult> GetAll()
         {
-            var httpResponse = await _httpWorker.GetAsync($"{_urlStorage.CategoryApiUrl}/all");
+            var httpResponse = await _httpWorker.GetAsync("all");
 
             if (httpResponse.IsSuccess)
             {
@@ -62,7 +65,7 @@ namespace ShopMicroservices.Controllers
         [HttpGet("{Id}")]
         public override async Task<IActionResult> GetById([FromRoute] string Id)
         {
-            var httpResponse = await _httpWorker.GetAsync($"{_urlStorage.CategoryApiUrl}/{Id}");
+            var httpResponse = await _httpWorker.GetAsync($"{Id}");
 
             if (httpResponse.IsSuccess)
             {
@@ -76,7 +79,7 @@ namespace ShopMicroservices.Controllers
         public override async Task<IActionResult> Update(CategoryModelDTO model)
         {
             string data = JsonConvert.SerializeObject(model);
-            var httpResponse = await _httpWorker.UpdateAsync(_urlStorage.CategoryApiUrl, data);
+            var httpResponse = await _httpWorker.UpdateAsync(data);
 
             if (httpResponse.IsSuccess)
             {

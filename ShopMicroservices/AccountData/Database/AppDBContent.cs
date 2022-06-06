@@ -1,6 +1,4 @@
-﻿
-
-using AccountData.Models;
+﻿using AccountData.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

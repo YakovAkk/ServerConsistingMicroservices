@@ -3,7 +3,6 @@ using CategoryData.Data.Models.Base;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-
 namespace CategoryData.Data.Models
 {
     [NameCollection("Categories")]

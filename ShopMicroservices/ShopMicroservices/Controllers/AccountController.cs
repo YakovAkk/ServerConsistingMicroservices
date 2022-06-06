@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ShopMicroservices.ApiModels;
 using ShopMicroservices.Controllers.Base;
+using ShopMicroservices.Enum;
 using ShopMicroservices.httpClient.Base;
+using ShopMicroservices.HttpWorker;
 
 namespace ShopMicroservices.Controllers
 {
@@ -12,16 +14,18 @@ namespace ShopMicroservices.Controllers
     [AllowAnonymous]
     public class AccountController : MyControllerBase<AccountRegistrationModelDTO>
     {
-        public AccountController(IHttpWorker httpWorker) : base(httpWorker)
-        {
+        public override IHttpWorker _httpWorker { get ; set ; }
 
+        public AccountController()
+        {
+            _httpWorker = new MyHttpWorker(UrlEnum.AccountApiUrl);
         }
 
         [HttpPost("Logout")]
         public async Task<IActionResult> Logout([FromBody] AccountLoginDTO model)
         {
             string data = JsonConvert.SerializeObject(model);
-            var httpResponse = await _httpWorker.PostAsync($"{_urlStorage.AccountApiUrl}/Logout", data);
+            var httpResponse = await _httpWorker.PostAsync(data, "Logout");
 
             if (httpResponse.IsSuccess)
             {
@@ -35,7 +39,7 @@ namespace ShopMicroservices.Controllers
         public async Task<IActionResult> Login([FromBody] AccountLoginDTO model)
         {
             string data = JsonConvert.SerializeObject(model);
-            var httpResponse = await _httpWorker.PostAsync($"{_urlStorage.AccountApiUrl}/Login", data);
+            var httpResponse = await _httpWorker.PostAsync(data, "Login");
 
             if (httpResponse.IsSuccess)
             {
@@ -49,7 +53,7 @@ namespace ShopMicroservices.Controllers
         public override async Task<IActionResult> Create([FromBody] AccountRegistrationModelDTO model)
         {
             string data = JsonConvert.SerializeObject(model);
-            var httpResponse = await _httpWorker.PostAsync($"{_urlStorage.AccountApiUrl}/Register" ,data);
+            var httpResponse = await _httpWorker.PostAsync(data, "Register");
 
             if (httpResponse.IsSuccess)
             {
@@ -62,7 +66,7 @@ namespace ShopMicroservices.Controllers
         [HttpDelete("{Id}")]
         public override async Task<IActionResult> Delete([FromRoute] string Id)
         {
-            var httpResponse = await _httpWorker.DeleteAsync($"{_urlStorage.AccountApiUrl}/{Id}");
+            var httpResponse = await _httpWorker.DeleteAsync($"{Id}");
 
             if (httpResponse.IsSuccess)
             {
@@ -75,7 +79,7 @@ namespace ShopMicroservices.Controllers
         [HttpGet("all")]
         public override async Task<IActionResult> GetAll()
         {
-            var httpResponse = await _httpWorker.GetAsync($"{_urlStorage.AccountApiUrl}/all");
+            var httpResponse = await _httpWorker.GetAsync("all");
 
             if (httpResponse.IsSuccess)
             {
@@ -88,7 +92,7 @@ namespace ShopMicroservices.Controllers
         [HttpGet("{Id}")]
         public override async Task<IActionResult> GetById([FromRoute] string Id)
         {
-            var httpResponse = await _httpWorker.GetAsync($"{_urlStorage.AccountApiUrl}/{Id}");
+            var httpResponse = await _httpWorker.GetAsync($"{Id}");
 
             if (httpResponse.IsSuccess)
             {
@@ -102,7 +106,7 @@ namespace ShopMicroservices.Controllers
         public override async Task<IActionResult> Update([FromBody] AccountRegistrationModelDTO model)
         {
             string data = JsonConvert.SerializeObject(model);
-            var httpResponse = await _httpWorker.UpdateAsync($"{_urlStorage.AccountApiUrl}" ,data );
+            var httpResponse = await _httpWorker.UpdateAsync(data);
 
             if (httpResponse.IsSuccess)
             {
