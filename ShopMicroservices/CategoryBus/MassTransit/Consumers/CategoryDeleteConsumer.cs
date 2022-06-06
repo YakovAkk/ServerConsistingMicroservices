@@ -4,11 +4,11 @@ using MassTransit;
 
 namespace Bus.MassTransit.Consumers
 {
-    public class DeleteConsumer : IConsumer<CategoryContractDelete>
+    public class CategoryDeleteConsumer : IConsumer<CategoryContractDelete>
     {
         private readonly ICategoryRepository _repository;
         private readonly IPublishEndpoint _publishEndpoint;
-        public DeleteConsumer(ICategoryRepository repository, IPublishEndpoint publishEndpoint)
+        public CategoryDeleteConsumer(ICategoryRepository repository, IPublishEndpoint publishEndpoint)
         {
             _publishEndpoint = publishEndpoint;
             _repository = repository;

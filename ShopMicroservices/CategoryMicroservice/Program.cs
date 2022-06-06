@@ -1,3 +1,6 @@
+using Bus.MassTransit.Consumers;
+using Bus.MassTransit.Contracts.ContractsModel;
+using Bus.MassTransit.Queues;
 using CategoryData.Data.DatabaseNoSql;
 using CategoryData.Data.Models;
 using CategoryMicroservice.RabbitMq;
@@ -6,12 +9,12 @@ using CategoryRepositories.RepositoriesMongo.Base;
 using CategoryServices.Services;
 using CategoryServices.Services.Base;
 using MassTransit;
-using Bus.MassTransit.Consumers;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Bus.MassTransit.Queues;
 
-using Bus.MassTransit.Contracts.ContractsModel;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,9 +22,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumer<CreateConsumer>();
-    x.AddConsumer<UpdateConsumer>();
-    x.AddConsumer<DeleteConsumer>();
+    x.AddConsumer<CategoryCreateConsumer>();
+    x.AddConsumer<CategoryUpdateConsumer>();
+    x.AddConsumer<CategoryDeleteConsumer>();
     x.UsingRabbitMq((ctx, config) =>
     {
         config.Host(RabbitMqConsts.RabbitMqRootUri + $"{RabbitMqConsts.VirtualHost}", h =>
@@ -31,9 +34,9 @@ builder.Services.AddMassTransit(x =>
         });
         config.ReceiveEndpoint(CategoryContractsQueue.NotificationQueueNameCategories, ep =>
         {
-            ep.ConfigureConsumer<UpdateConsumer>(ctx);
-            ep.ConfigureConsumer<CreateConsumer>(ctx);
-            ep.ConfigureConsumer<DeleteConsumer>(ctx);
+            ep.ConfigureConsumer<CategoryUpdateConsumer>(ctx);
+            ep.ConfigureConsumer<CategoryCreateConsumer>(ctx);
+            ep.ConfigureConsumer<CategoryDeleteConsumer>(ctx);
         });
         config.AutoStart = true;
     });

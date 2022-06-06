@@ -5,11 +5,11 @@ using MassTransit;
 
 namespace Bus.MassTransit.Consumers
 {
-    public class CreateConsumer : IConsumer<CategoryContractCreate>
+    public class CategoryCreateConsumer : IConsumer<CategoryContractCreate>
     {
         private readonly ICategoryRepository _repository;
         private readonly IPublishEndpoint _publishEndpoint;
-        public CreateConsumer(ICategoryRepository repository, IPublishEndpoint publishEndpoint)
+        public CategoryCreateConsumer(ICategoryRepository repository, IPublishEndpoint publishEndpoint)
         {
             _publishEndpoint = publishEndpoint;
             _repository = repository;

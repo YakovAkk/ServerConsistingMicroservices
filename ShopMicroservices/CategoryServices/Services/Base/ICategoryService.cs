@@ -1,4 +1,4 @@
-﻿using Bus.MassTransit.Contracts;
+﻿
 using CategoryData.Data.Models;
 
 namespace CategoryServices.Services.Base
