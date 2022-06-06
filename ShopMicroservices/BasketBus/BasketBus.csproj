@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit" Version="8.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.2.0" />
+    <PackageReference Include="MassTransit" Version="8.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SendToMailServices\SendToMailServices.csproj" />
+    <ProjectReference Include="..\BasketData\BasketData.csproj" />
+    <ProjectReference Include="..\BasketRepository\BasketRepository.csproj" />
   </ItemGroup>
 
 </Project>
