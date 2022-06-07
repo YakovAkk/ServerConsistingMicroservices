@@ -4,6 +4,7 @@
     {
         CategoryApiUrl,
         AccountApiUrl,
-        LegoApiUrl
+        LegoApiUrl,
+        BasketApiUrl
     }
 }

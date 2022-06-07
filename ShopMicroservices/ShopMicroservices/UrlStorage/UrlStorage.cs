@@ -14,6 +14,7 @@ namespace ShopMicroservices.UrlStorage
             ApisUrl.Add(UrlEnum.AccountApiUrl, "https://localhost:7224/api/Account");
             ApisUrl.Add(UrlEnum.CategoryApiUrl, "https://localhost:7264/api/Category");
             ApisUrl.Add(UrlEnum.LegoApiUrl, "https://localhost:7249/api/Lego");
+            ApisUrl.Add(UrlEnum.BasketApiUrl, "https://localhost:7203/api/Basket");
         }
 
         public static MyUrlStorage getInstance()

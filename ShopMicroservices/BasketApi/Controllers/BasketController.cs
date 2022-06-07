@@ -8,7 +8,7 @@ namespace BasketApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [AllowAnonymous]
     public class BasketController : ControllerBase
     {
         private readonly IBasketService _basketService;
@@ -32,11 +32,30 @@ namespace BasketApi.Controllers
 
         }
 
-        [HttpDelete("{id}")]
+        [HttpPut]
+        public async Task<IActionResult> UpdateBasket([FromBody] BasketModelDTO basketModel)
+        {
+            var result = await _basketService.UpdateAsync(basketModel);
+
+            if (result.MessageWhatWrong != null && result.MessageWhatWrong.Trim() != "")
+            {
+                return BadRequest(result.MessageWhatWrong);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteBasket([FromRoute] string Id)
         {
-            await _basketService.DeleteAsync(Id);
-            return Ok();
+            var result = await _basketService.DeleteAsync(Id);
+
+            if (result.MessageWhatWrong != null)
+            {
+                return BadRequest(result.MessageWhatWrong);
+            }
+
+            return Ok(result);
         }
 
         [HttpGet("all")]
@@ -56,21 +75,8 @@ namespace BasketApi.Controllers
             return Ok(result);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateBasket([FromBody] BasketModelDTO basketModel)
-        {
-            var result = await _basketService.UpdateAsync(basketModel);
-
-            if (result.MessageWhatWrong != null && result.MessageWhatWrong.Trim() != "")
-            {
-                return BadRequest(result.MessageWhatWrong);
-            }
-
-            return Ok(result);
-        }
-
-        [HttpGet("id")]
-        public async Task<IActionResult> GetByIdBasketAsync([FromQuery] string Id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetByIdBasket([FromRoute] string Id)
         {
             var result = await _basketService.GetByIDAsync(Id);
 

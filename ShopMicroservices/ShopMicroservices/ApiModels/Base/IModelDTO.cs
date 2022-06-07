@@ -2,6 +2,6 @@
 {
     public interface IModelDTO
     {
-        public string Name { get; set; }
+        public string Id { get; set; }
     }
 }

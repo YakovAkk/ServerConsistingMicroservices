@@ -1,5 +1,6 @@
 ﻿using BasketBus.MassTransit.Contracts;
 using BasketData.Data.Base.Models;
+using BasketData.Data.Models;
 using BasketRepository.RepositoriesMongo.Base;
 using BasketService.DTOs;
 using BasketService.Services.Base;
@@ -12,13 +13,48 @@ namespace BasketService.Services
         private readonly IRequestClient<BasketContractCreate> _clientCreate;
         private readonly IRequestClient<BasketContractUpdate> _clientUpdate;
         private readonly IRequestClient<BasketContractDelete> _clientDelete;
-        public BasketService(IBasketRepository repository) : base(repository)
+        public BasketService(IBasketRepository repository, 
+            IRequestClient<BasketContractCreate> clientCreate, 
+            IRequestClient<BasketContractUpdate> clientUpdate,
+            IRequestClient<BasketContractDelete> clientDelete) : base(repository)
         {
+            _clientCreate = clientCreate;
+            _clientUpdate = clientUpdate;
+            _clientDelete = clientDelete;
+
         }
 
         public override async Task<BasketModel> AddAsync(BasketModelDTO item)
         {
-            var request = await _clientCreate.GetResponse<BasketContractCreate>(item);
+            var model = new BasketContractCreate()
+            {
+                Lego = new LegoModel()
+                { 
+                    Category = new CategoryModel()
+                    {
+                        Name = item.Lego.Category.Name,
+                        ImageUrl = item.Lego.Category.ImageUrl
+                    },
+                    Name = item.Lego.Name,
+                    ImageUrl = item.Lego.ImageUrl,
+                    Description = item.Lego.Description,
+                    Price = item.Lego.Price,
+                    isFavorite = item.Lego.isFavorite
+                },
+                User = new UserModel()
+                {
+                    Email = item.User.Email,
+                    Name = item.User.Name,
+                    NickName = item.User.NickName,
+                    DataRegistration = item.User.DataRegistration,
+                    Password = item.User.Password,
+                    RememberMe = item.User.RememberMe
+                },
+                Amount = item.Amount,
+                DateDeal = item.DateDeal
+            };
+
+            var request = await _clientCreate.GetResponse<BasketContractCreate>(model);
 
             if (request.Message == null)
             {
@@ -69,7 +105,34 @@ namespace BasketService.Services
 
         public override async Task<BasketModel> UpdateAsync(BasketModelDTO item)
         {
-            var request = await _clientUpdate.GetResponse<BasketContractUpdate>(item);
+            var model = new BasketContractUpdate()
+            {
+                Lego = new LegoModel()
+                {
+                    Category = new CategoryModel()
+                    {
+                        Name = item.Lego.Category.Name,
+                        ImageUrl = item.Lego.Category.ImageUrl
+                    },
+                    Name = item.Lego.Name,
+                    ImageUrl = item.Lego.ImageUrl,
+                    Description = item.Lego.Description,
+                    Price = item.Lego.Price,
+                    isFavorite = item.Lego.isFavorite
+                },
+                User = new UserModel()
+                {
+                    Email = item.User.Email,
+                    Name = item.User.Name,
+                    NickName = item.User.NickName,
+                    DataRegistration = item.User.DataRegistration,
+                    Password = item.User.Password,
+                    RememberMe = item.User.RememberMe
+                },
+                Amount = item.Amount,
+                DateDeal = item.DateDeal
+            };
+            var request = await _clientUpdate.GetResponse<BasketContractUpdate>(model);
 
             if (request.Message == null)
             {
