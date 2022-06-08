@@ -1,15 +1,16 @@
 using BasketApi.RabbitMq;
 using BasketBus.MassTransit.Consumers;
 using BasketBus.MassTransit.Contracts;
+using BasketBus.MassTransit.GlobalConsumers;
 using BasketBus.MassTransit.Queues;
 using BasketData.Data.Base.Models;
 using BasketData.Data.DatabaseMongo;
 using BasketRepository.RepositoriesMongo;
 using BasketRepository.RepositoriesMongo.Base;
 using BasketService.Services.Base;
+using GlobalContracts.Queue;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<BasketCreateConsumer>();
     x.AddConsumer<BasketUpdateConsumer>();
     x.AddConsumer<BasketDeleteConsumer>();
+    x.AddConsumer<IsBasketExistConsumer>();
     x.UsingRabbitMq((ctx, config) =>
     {
         config.Host(RabbitMqConsts.RabbitMqRootUri + $"{RabbitMqConsts.VirtualHost}", h =>
@@ -32,6 +34,10 @@ builder.Services.AddMassTransit(x =>
             ep.ConfigureConsumer<BasketUpdateConsumer>(ctx);
             ep.ConfigureConsumer<BasketCreateConsumer>(ctx);
             ep.ConfigureConsumer<BasketDeleteConsumer>(ctx);
+        });
+        config.ReceiveEndpoint(GlobalQueues.NotificationQueueNameIsBasketExist, ep =>
+        {
+            ep.ConfigureConsumer<IsBasketExistConsumer>(ctx);
         });
         config.AutoStart = true;
     });

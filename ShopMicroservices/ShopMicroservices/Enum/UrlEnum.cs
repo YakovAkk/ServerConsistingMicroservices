@@ -5,6 +5,7 @@
         CategoryApiUrl,
         AccountApiUrl,
         LegoApiUrl,
-        BasketApiUrl
+        BasketApiUrl,
+        HistoryApiUrl
     }
 }

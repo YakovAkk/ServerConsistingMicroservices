@@ -43,11 +43,11 @@ namespace LegoRepository.RepositoriesMongo
 
             if (result == null)
             {
-                var category = new LegoModel();
+                var lego = new LegoModel();
 
-                category.MessageWhatWrong = "Can't add item to database";
+                lego.MessageWhatWrong = "Can't add item to database";
 
-                return category;
+                return lego;
             }
 
             return result;
@@ -98,7 +98,7 @@ namespace LegoRepository.RepositoriesMongo
         {
             var data = await GetByIDAsync(id);
 
-            if (data == null)
+            if (data.MessageWhatWrong != null)
             {
                 var responce = new LegoModel()
                 {

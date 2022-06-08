@@ -12,16 +12,17 @@ namespace ShopMicroservices.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class LegoController : MyControllerBase<LegoModelDTO>
+    public class HistoryController : MyControllerBase<HistoryModelDTO>
     {
-        public override IHttpWorker _httpWorker { get; set; }
-        public LegoController()
+        public override IHttpWorker _httpWorker { get ; set ; }
+
+        public HistoryController()
         {
-            _httpWorker = new MyHttpWorker(UrlEnum.LegoApiUrl);
+            _httpWorker = new MyHttpWorker(UrlEnum.HistoryApiUrl);
         }
 
         [HttpPost]
-        public async override Task<IActionResult> Create(LegoModelDTO model)
+        public override async Task<IActionResult> Create(HistoryModelDTO model)
         {
             string data = JsonConvert.SerializeObject(model);
             var httpResponse = await _httpWorker.PostAsync(data);
@@ -34,8 +35,22 @@ namespace ShopMicroservices.Controllers
             return BadRequest(httpResponse);
         }
 
+        [HttpPut]
+        public override async Task<IActionResult> Update(HistoryModelDTO model)
+        {
+            string data = JsonConvert.SerializeObject(model);
+            var httpResponse = await _httpWorker.UpdateAsync(data);
+
+            if (httpResponse.IsSuccess)
+            {
+                return Ok(httpResponse.Data);
+            }
+
+            return BadRequest(httpResponse);
+        }
+
         [HttpDelete("{Id}")]
-        public async override Task<IActionResult> Delete([FromRoute] string Id)
+        public override async Task<IActionResult> Delete([FromRoute] string Id)
         {
             var httpResponse = await _httpWorker.DeleteAsync($"{Id}");
 
@@ -48,7 +63,7 @@ namespace ShopMicroservices.Controllers
         }
 
         [HttpGet("all")]
-        public async override Task<IActionResult> GetAll()
+        public override async Task<IActionResult> GetAll()
         {
             var httpResponse = await _httpWorker.GetAsync("all");
 
@@ -61,7 +76,7 @@ namespace ShopMicroservices.Controllers
         }
 
         [HttpGet("{Id}")]
-        public async override Task<IActionResult> GetById([FromRoute] string Id)
+        public override async Task<IActionResult> GetById([FromRoute] string Id)
         {
             var httpResponse = await _httpWorker.GetAsync($"{Id}");
 
@@ -73,18 +88,6 @@ namespace ShopMicroservices.Controllers
             return BadRequest(httpResponse);
         }
 
-        [HttpPut]
-        public async override Task<IActionResult> Update(LegoModelDTO model)
-        {
-            string data = JsonConvert.SerializeObject(model);
-            var httpResponse = await _httpWorker.UpdateAsync(data);
-
-            if (httpResponse.IsSuccess)
-            {
-                return Ok(httpResponse.Data);
-            }
-
-            return BadRequest(httpResponse);
-        }
+        
     }
 }
