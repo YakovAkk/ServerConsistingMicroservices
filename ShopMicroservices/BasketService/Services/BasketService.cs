@@ -87,6 +87,7 @@ namespace BasketService.Services
         {
             var model = new BasketContractUpdate()
             {
+                Id = item.Id,
                 Lego_Id = item.Lego_Id,
                 User_Id = item.User_Id,
                 Amount = item.Amount,

@@ -9,15 +9,11 @@ namespace BasketRepository.RepositoriesMongo
 {
     public class BasketRepositoty : RepositoryBase<BasketModel>, IBasketRepository
     {
-        private readonly IRequestClient<IsLegoExistContract> _isLegoExistClient;
-        private readonly IRequestClient<IsUserExistContract> _isUserExistClient;
+
         protected override IMongoCollection<BasketModel> Collection { get; set; }
-        public BasketRepositoty(MongoDatabase<BasketModel> mongoDatabase,
-            IRequestClient<IsLegoExistContract> isLegoExistClient,
-            IRequestClient<IsUserExistContract> isUserExistClient) : base(mongoDatabase)
+        public BasketRepositoty(MongoDatabase<BasketModel> mongoDatabase) : base(mongoDatabase)
         {
-            _isLegoExistClient = isLegoExistClient;
-            _isUserExistClient = isUserExistClient;
+
         }
         public override async Task<BasketModel> AddAsync(BasketModel item)
         {
@@ -38,105 +34,85 @@ namespace BasketRepository.RepositoriesMongo
                 basket.MessageWhatWrong = "Database has already the lego";
                 return basket;
             }
-           
-            var legoIdModel = new IsLegoExistContract()
+
+
+            var document = new BasketModel()
             {
-                LegoId = item.Lego_Id
+                Lego_Id = item.Lego_Id,
+                User_Id = item.User_Id,
+                Amount = item.Amount,
+                DateDeal = item.DateDeal
             };
 
-            var userIdModel = new IsUserExistContract()
-            {
-                UserId = item.User_Id
-            };
+            await Collection.InsertOneAsync(document);
 
-            var isLegoExist = await _isLegoExistClient.GetResponse<IsLegoExistContract>(legoIdModel);
-            var isUserExist = await _isUserExistClient.GetResponse<IsUserExistContract>(userIdModel);
+            var result = await FindByLegoAndUserAsync(document.Lego_Id, document.User_Id);
 
-            if(isLegoExist.Message.IsLegoExist && isUserExist.Message.IsUserExist)
+            if (result == null)
             {
-                var document = new BasketModel()
+                return new BasketModel()
                 {
-                    Lego_Id = item.Lego_Id,
-                    User_Id = item.User_Id,
-                    Amount = item.Amount,
-                    DateDeal = item.DateDeal
+                    MessageWhatWrong = "The BasketItem wasn't append"
                 };
-
-                await Collection.InsertOneAsync(document);
-
-                var result = await FindByLegoAndUserAsync(document.Lego_Id, document.User_Id);
-
-                if (result == null)
-                {
-                    return new BasketModel()
-                    {
-                        MessageWhatWrong = "The BasketItem wasn't append"
-                    };
-                }
-
-                return result;
             }
 
-            var resBasket = new BasketModel();
-            resBasket.MessageWhatWrong = "Lego Or User don't exist";
-            return resBasket;
+            return result;
+
+
+
         }
         public override async Task<BasketModel> UpdateAsync(BasketModel item)
         {
-            var Lego = await GetAllAsync();
-            if (Lego == null)
+            if (item == null)
             {
                 var basket = new BasketModel();
-                basket.MessageWhatWrong = "Database has't any lego";
+                basket.MessageWhatWrong = "Item was null";
                 return basket;
             }
 
-            var legoIdModel = new IsLegoExistContract()
+
+
+
+            var result = await GetByIDAsync(item.Id);
+
+            if (result == null)
             {
-                LegoId = item.Lego_Id
-            };
-
-            var useIdModel = new IsUserExistContract()
-            {
-                UserId = item.User_Id
-            };
-
-            var isLegoExist = await _isLegoExistClient.GetResponse<IsLegoExistContract>(legoIdModel);
-            var isUserExist = await _isUserExistClient.GetResponse<IsUserExistContract>(useIdModel);
-
-            if (isLegoExist.Message.IsLegoExist && isUserExist.Message.IsUserExist)
-            {
-                var resultUpdate = await Collection.UpdateOneAsync(i => i.Id == item.Id, Builders<BasketModel>.Update
-                   .Set(b => b.Lego_Id, item.Lego_Id)
-                   .Set(b => b.User_Id, item.User_Id)
-                   .Set(b => b.Amount, item.Amount)
-                   .Set(b => b.DateDeal, item.DateDeal));
-
-                if (resultUpdate == null)
+                return new BasketModel()
                 {
-                    var basket = new BasketModel()
-                    {
-                        MessageWhatWrong = "The element hasn't contained in database"
-                    };
-                    return basket;
-                }
-
-                var result = await FindByLegoAndUserAsync(item.Lego_Id, item.User_Id);
-
-                if (result == null)
-                {
-                    return new BasketModel()
-                    {
-                        MessageWhatWrong = "The BasketItem wasn't Updated"
-                    };
-                }
-
-                return result;
+                    MessageWhatWrong = "The BasketItem doesn't contain in the database"
+                };
             }
 
-            var resBasket = new BasketModel();
-            resBasket.MessageWhatWrong = "Lego Or User don't exist";
-            return resBasket;
+            var resultUpdate = await Collection.UpdateOneAsync(i => i.Id == item.Id, Builders<BasketModel>.Update
+               .Set(b => b.Lego_Id, item.Lego_Id)
+               .Set(b => b.User_Id, item.User_Id)
+               .Set(b => b.Amount, item.Amount)
+               .Set(b => b.DateDeal, item.DateDeal)
+               .Set(b => b.MessageWhatWrong, item.MessageWhatWrong));
+
+            if (resultUpdate == null)
+            {
+                var basket = new BasketModel()
+                {
+                    MessageWhatWrong = "The element hasn't contained in database"
+                };
+                return basket;
+            }
+
+            result = await FindByLegoAndUserAsync(item.Lego_Id, item.User_Id);
+
+            if (result == null)
+            {
+                return new BasketModel()
+                {
+                    MessageWhatWrong = "The BasketItem wasn't Updated"
+                };
+            }
+
+            return result;
+
+
+
 
         }
         private async Task<BasketModel> FindByLegoAndUserAsync(string legoId, string userId)
@@ -162,6 +138,29 @@ namespace BasketRepository.RepositoriesMongo
             await Collection.DeleteOneAsync(i => i.Id == id);
 
             return result;
+        }
+        public override async Task<BasketModel> GetByIDAsync(string id)
+        {
+            var allItems = await GetAllAsync();
+            if (allItems == null)
+            {
+                return new BasketModel()
+                {
+                    MessageWhatWrong = "The database doesn't cotain any category"
+                };
+            }
+
+            var data = allItems.FirstOrDefault(i => i.Id == id);
+
+            if (data == null)
+            {
+                return new BasketModel()
+                {
+                    MessageWhatWrong = "The basket doesn't exist"
+                };
+            }
+
+            return data;
         }
     }
 }

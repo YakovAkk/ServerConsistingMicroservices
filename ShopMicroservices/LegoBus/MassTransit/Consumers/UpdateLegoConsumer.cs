@@ -1,4 +1,5 @@
-﻿using LegoBus.MassTransit.Contracts;
+﻿using GlobalContracts.Contracts;
+using LegoBus.MassTransit.Contracts;
 using LegoData.Data.Models;
 using LegoRepository.RepositoriesMongo.Base;
 using MassTransit;
@@ -7,12 +8,15 @@ namespace LegoBus.MassTransit.Consumers
 {
     public class UpdateLegoConsumer : IConsumer<LegoContractUpdate>
     {
+        private readonly IRequestClient<IsCategoryExistContract> _isCategoryExistClient;
         private readonly ILegoRepository _repository;
         private readonly IPublishEndpoint _publishEndpoint;
-        public UpdateLegoConsumer(ILegoRepository repository, IPublishEndpoint publishEndpoint)
+        public UpdateLegoConsumer(ILegoRepository repository, IPublishEndpoint publishEndpoint,
+             IRequestClient<IsCategoryExistContract> isCategoryExistClient)
         {
             _publishEndpoint = publishEndpoint;
             _repository = repository;
+            _isCategoryExistClient = isCategoryExistClient;
         }
         public async Task Consume(ConsumeContext<LegoContractUpdate> context)
         {
@@ -27,21 +31,35 @@ namespace LegoBus.MassTransit.Consumers
                 Category_Id = context.Message.Category_Id
             };
 
-            var data = await _repository.UpdateAsync(lego);
+            var IsCategoryExistModel = new IsCategoryExistContract() { CategoryId = lego.Category_Id };
 
-            if (data != null)
+            var isCategoryExist = await _isCategoryExistClient.GetResponse<IsCategoryExistContract>(IsCategoryExistModel);
+
+            if (isCategoryExist.Message.IsCategoryExist)
             {
-                if (context.IsResponseAccepted<LegoContractUpdate>())
+                var data = await _repository.UpdateAsync(lego);
+                if (data != null)
                 {
-                    await _publishEndpoint.Publish(data);
-                    await context.RespondAsync<LegoContractUpdate>(data);
+                    if (context.IsResponseAccepted<LegoContractUpdate>())
+                    {
+                        await _publishEndpoint.Publish(data);
+                        await context.RespondAsync<LegoContractUpdate>(data);
+                    }
+                }
+                else
+                {
+                    var userResponce = new LegoContractUpdate()
+                    {
+                        MessageWhatWrong = "Incorrect creditals"
+                    };
+                    await _publishEndpoint.Publish(userResponce);
                 }
             }
             else
             {
-                var userResponce = new LegoContractUpdate()
+                var userResponce = new LegoContractCreate()
                 {
-                    MessageWhatWrong = "Incorrect creditals" 
+                    MessageWhatWrong = "The Category doesn't exist"
                 };
                 await _publishEndpoint.Publish(userResponce);
             }
