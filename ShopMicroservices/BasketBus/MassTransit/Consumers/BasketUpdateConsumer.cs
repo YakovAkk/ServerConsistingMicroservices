@@ -1,7 +1,6 @@
 ﻿using BasketBus.MassTransit.Contracts;
 using BasketData.Data.Base.Models;
 using BasketRepository.RepositoriesMongo.Base;
-using BasketRepository.RepositorySql.Base;
 using MassTransit;
 
 namespace BasketBus.MassTransit.Consumers
@@ -10,61 +9,39 @@ namespace BasketBus.MassTransit.Consumers
     {
         private readonly IBasketRepository _repository;
         private readonly IPublishEndpoint _publishEndpoint;
-        private readonly IUserRepository _userService;
-        public BasketUpdateConsumer(IBasketRepository repository, IPublishEndpoint publishEndpoint, IUserRepository userService)
+        public BasketUpdateConsumer(IBasketRepository repository, IPublishEndpoint publishEndpoint)
         {
             _repository = repository;
             _publishEndpoint = publishEndpoint;
-            _userService = userService;
         }
 
         public async Task Consume(ConsumeContext<BasketContractUpdate> context)
         {
-            var resUser = await _userService.FindByEmailAsync(context.Message.User.Email);
-
-            if (resUser.MessageThatWrong != null && resUser.MessageThatWrong.Trim() != "")
+            var basket = new BasketModel()
             {
-                resUser = new BasketData.Data.Models.UserModel()
-                {
-                    MessageThatWrong = "Database doesn't contain the user"
-                };
+                Amount = context.Message.Amount,
+                Lego_Id = context.Message.Lego_Id,
+                User_Id = context.Message.User_Id
+            };
 
-                var data = new BasketContractUpdate()
-                {
-                    MessageWhatWrong = resUser.MessageThatWrong
-                };
+            var data = await _repository.UpdateAsync(basket);
 
-                await _publishEndpoint.Publish(data);
-                await context.RespondAsync<BasketContractUpdate>(data);
+            if (data != null)
+            {
+                if (context.IsResponseAccepted<BasketContractUpdate>())
+                {
+                    await _publishEndpoint.Publish(data);
+                    await context.RespondAsync<BasketContractUpdate>(data);
+                }
             }
             else
             {
-                var basket = new BasketModel()
+                var userResponce = new BasketContractUpdate()
                 {
-                    Amount = Convert.ToUInt32(context.Message.Amount),
-                    Lego = context.Message.Lego,
-                    User = resUser
+                    MessageWhatWrong = "Incorrect creditals"
                 };
-
-                var data = await _repository.AddAsync(basket);
-
-                if (data != null)
-                {
-                    if (context.IsResponseAccepted<BasketContractUpdate>())
-                    {
-                        await _publishEndpoint.Publish(data);
-                        await context.RespondAsync<BasketContractUpdate>(data);
-                    }
-                }
-                else
-                {
-                    var userResponce = new BasketContractUpdate()
-                    {
-                        MessageWhatWrong = "Incorrect creditals"
-                    };
-                    await _publishEndpoint.Publish(userResponce);
-                }
-            }     
+                await _publishEndpoint.Publish(userResponce);
+            }
         }
     }
 }

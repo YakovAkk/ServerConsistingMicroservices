@@ -43,7 +43,7 @@ namespace LegoService.Services
                 Description = response.Message.Description,
                 Price = response.Message.Price,
                 isFavorite = response.Message.isFavorite,
-                Category = response.Message.Category,
+                Category_Id = response.Message.Category_Id,
                 MessageWhatWrong = response.Message.MessageWhatWrong
             };
         }
@@ -72,7 +72,7 @@ namespace LegoService.Services
                 Description = response.Message.Description,
                 Price = response.Message.Price,
                 isFavorite = response.Message.isFavorite,
-                Category = response.Message.Category,
+                Category_Id = response.Message.Category_Id,
                 MessageWhatWrong = response.Message.MessageWhatWrong
             };
         }
@@ -96,7 +96,7 @@ namespace LegoService.Services
                 Description = response.Message.Description,
                 Price = response.Message.Price,
                 isFavorite = response.Message.isFavorite,
-                Category = response.Message.Category,
+                Category_Id = response.Message.Category_Id,
                 MessageWhatWrong = response.Message.MessageWhatWrong
             };
         }

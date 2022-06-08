@@ -78,7 +78,7 @@ namespace LegoMicroservice.Controllers
         {
             var result = await _legoService.GetByIDAsync(Id);
 
-            if (result.MessageWhatWrong != null && result.MessageWhatWrong.Trim() != "")
+            if (result.MessageWhatWrong != null)
             {
                 return BadRequest(result.MessageWhatWrong);
             }

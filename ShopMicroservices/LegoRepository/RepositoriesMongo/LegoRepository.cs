@@ -1,15 +1,20 @@
-﻿using LegoData.Data.DatabaseMongo;
+﻿using GlobalContracts.Contracts;
+using LegoData.Data.DatabaseMongo;
 using LegoData.Data.Models;
 using LegoRepository.RepositoriesMongo.Base;
+using MassTransit;
 using MongoDB.Driver;
 
 namespace LegoRepository.RepositoriesMongo
 {
     public class LegoRepository : BaseRepository<LegoModel>, ILegoRepository
     {
+        private readonly IRequestClient<IsCategoryExistContract> _isCategoryExistClient;
         protected override IMongoCollection<LegoModel> Collection { get; set; }
-        public LegoRepository(MongoDatabase<LegoModel> mongoDatabase) : base(mongoDatabase)
+        public LegoRepository(MongoDatabase<LegoModel> mongoDatabase, 
+            IRequestClient<IsCategoryExistContract> isCategoryExistClient) : base(mongoDatabase)
         {
+            _isCategoryExistClient = isCategoryExistClient;
         }
         public override async Task<LegoModel> AddAsync(LegoModel item)
         {
@@ -22,29 +27,44 @@ namespace LegoRepository.RepositoriesMongo
                 return lego;
             }
 
-            var document = new LegoModel() {
-                Name = item.Name,
-                ImageUrl = item.ImageUrl,
-                Description = item.Description,
-                Price = item.Price,
-                isFavorite = item.isFavorite,
-                Category = item.Category
-            };
+            var IsCategoryExistModel = new IsCategoryExistContract() { CategoryId = item.Category_Id };
 
-            await Collection.InsertOneAsync(document);
+            var isCategoryExist = await _isCategoryExistClient.GetResponse<IsCategoryExistContract>(IsCategoryExistModel);
 
-            var result = await GetByNameAsync(item.Name);
-
-            if (result == null)
+            if (isCategoryExist.Message.IsCategoryExist)
             {
-                var category = new LegoModel();
+                var document = new LegoModel()
+                {
+                    Name = item.Name,
+                    ImageUrl = item.ImageUrl,
+                    Description = item.Description,
+                    Price = item.Price,
+                    isFavorite = item.isFavorite,
+                    Category_Id = item.Category_Id
+                };
 
-                category.MessageWhatWrong = "Can't add item to database";
+                await Collection.InsertOneAsync(document);
 
-                return category;
+                var result = await GetByNameAsync(item.Name);
+
+                if (result == null)
+                {
+                    var category = new LegoModel();
+
+                    category.MessageWhatWrong = "Can't add item to database";
+
+                    return category;
+                }
+
+                return result;
             }
 
-            return result;
+            var resLego = new LegoModel();
+
+            resLego.MessageWhatWrong = "The Category Isn't exist";
+
+            return resLego;
+
         }
         private async Task<LegoModel> GetByNameAsync(string name)
         {
@@ -60,31 +80,44 @@ namespace LegoRepository.RepositoriesMongo
                 lego.MessageWhatWrong = "Item was null";
                 return lego;
             }
+           
+            var IsCategoryExistModel = new IsCategoryExistContract() { CategoryId = item.Category_Id };
 
-            var result = await Collection.UpdateOneAsync(i => i.Id == item.Id, Builders<LegoModel>.Update
+            var isCategoryExist = await _isCategoryExistClient.GetResponse<IsCategoryExistContract>(IsCategoryExistModel);
+
+            if (isCategoryExist.Message.IsCategoryExist)
+            {
+                var result = await Collection.UpdateOneAsync(i => i.Id == item.Id, Builders<LegoModel>.Update
                .Set(l => l.Name, item.Name)
                .Set(l => l.ImageUrl, item.ImageUrl)
                .Set(l => l.Description, item.Description)
                .Set(l => l.Price, item.Price)
                .Set(l => l.isFavorite, item.isFavorite)
-               .Set(l => l.Category, item.Category));
+               .Set(l => l.Category_Id, item.Category_Id));
 
-            if (result == null)
-            {
-                var lego = new LegoModel();
-                lego.MessageWhatWrong = " The element hasn't contained in database";
-                return lego;
+                if (result == null)
+                {
+                    var lego = new LegoModel();
+                    lego.MessageWhatWrong = "The element hasn't contained in database";
+                    return lego;
+                }
+
+                var resultItem = await GetByNameAsync(item.Name);
+
+                if (resultItem == null)
+                {
+                    var lego = new LegoModel();
+                    lego.MessageWhatWrong = "Can't update item to database";
+                    return lego;
+                }
+                return resultItem;
             }
 
-            var resultItem = await GetByNameAsync(item.Name);
+            var resLego = new LegoModel();
 
-            if (resultItem == null)
-            {
-                var lego = new LegoModel();
-                lego.MessageWhatWrong = "Can't update item to database";
-                return lego;
-            }
-            return resultItem;
+            resLego.MessageWhatWrong = "The Category Isn't exist";
+
+            return resLego;
         }
         public override async Task<LegoModel> DeleteAsync(string id)
         {
@@ -101,6 +134,30 @@ namespace LegoRepository.RepositoriesMongo
             }
 
             await Collection.DeleteOneAsync(i => i.Id == id);
+
+            return data;
+        }
+
+        public override async Task<LegoModel> GetByIDAsync(string id)
+        {
+            var allItems = await GetAllAsync();
+            if (allItems == null)
+            {
+                return new LegoModel()
+                {
+                    MessageWhatWrong = "The database doesn't cotain any category"
+                };
+            }
+
+            var data = allItems.FirstOrDefault(i => i.Id == id);
+
+            if (data == null)
+            {
+                return new LegoModel()
+                {
+                    MessageWhatWrong = "The category doesn't exist"
+                };
+            }
 
             return data;
         }

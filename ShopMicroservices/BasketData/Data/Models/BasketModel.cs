@@ -11,9 +11,9 @@ namespace BasketData.Data.Base.Models
     {
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
-        public LegoModel Lego { get; set; }
-        public UserModel User { get; set; }
-        public uint Amount { get; set; }
+        public string Lego_Id { get; set; }
+        public string User_Id { get; set; }
+        public int Amount { get; set; }
         public DateTime DateDeal { get; set; }
         public string? MessageWhatWrong { get; set; }
 

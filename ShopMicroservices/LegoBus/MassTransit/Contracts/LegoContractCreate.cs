@@ -10,27 +10,12 @@ namespace LegoBus.MassTransit.Contracts
         public string Description { get; set; }
         public uint Price { get; set; }
         public bool isFavorite { get; set; }
-        public CategoryModel Category { get; set; }
+        public string Category_Id { get; set; }
         public string? MessageWhatWrong { get; set; }
 
         public LegoContractCreate()
         {
 
-        }
-
-        public LegoContractCreate(string? id, 
-            string name, string imageUrl, string
-            description, uint price, bool isFavorite, 
-            CategoryModel category, string? messageWhatWrong)
-        {
-            Id = id;
-            Name = name;
-            ImageUrl = imageUrl;
-            Description = description;
-            Price = price;
-            this.isFavorite = isFavorite;
-            Category = category;
-            MessageWhatWrong = messageWhatWrong;
         }
     }
 }

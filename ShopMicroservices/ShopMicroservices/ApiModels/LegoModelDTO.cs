@@ -11,7 +11,6 @@ namespace ShopMicroservices.ApiModels
         public string Description { get; set; }
         public uint Price { get; set; }
         public bool isFavorite { get; set; }
-        public CategoryModelDTO Category { get; set; }
-        public string? MessageWhatWrong { get; set; }
+        public string Category_Id { get; set; }
     }
 }

@@ -4,11 +4,8 @@ using BasketBus.MassTransit.Contracts;
 using BasketBus.MassTransit.Queues;
 using BasketData.Data.Base.Models;
 using BasketData.Data.DatabaseMongo;
-using BasketData.Data.DatabaseSql;
 using BasketRepository.RepositoriesMongo;
 using BasketRepository.RepositoriesMongo.Base;
-using BasketRepository.RepositorySql;
-using BasketRepository.RepositorySql.Base;
 using BasketService.Services.Base;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -43,12 +40,8 @@ builder.Services.AddMassTransit(x =>
     x.AddRequestClient<BasketContractCreate>();
 });
 
-builder.Services.AddTransient<IUserRepository, UserRepository>();
-
 builder.Services.AddTransient<IBasketService, BasketService.Services.BasketService>();
 builder.Services.AddSingleton<MongoDatabase<BasketModel>>();
-builder.Services.AddDbContext<AppDBContent>(options =>
-options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=LegoDB;Trusted_Connection=True;TrustServerCertificate=True;"));
 
 builder.Services.AddTransient<IBasketRepository, BasketRepositoty>();
 builder.Services.Configure<BasketStoreDatabaseSettings>(builder.Configuration.GetSection("LegoStoreDatabase"));

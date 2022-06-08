@@ -10,7 +10,7 @@ namespace LegoBus.MassTransit.Contracts
         public string Description { get; set; }
         public uint Price { get; set; }
         public bool isFavorite { get; set; }
-        public CategoryModel Category { get; set; }
+        public string Category_Id { get; set; }
         public string? MessageWhatWrong { get; set; }
 
     }

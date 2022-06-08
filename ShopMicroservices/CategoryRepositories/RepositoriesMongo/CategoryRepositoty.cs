@@ -40,6 +40,31 @@ namespace CategoryRepositories.RepositoriesMongo
 
             return result;
         }
+
+        public override async Task<CategoryModel> GetByIDAsync(string id)
+        {
+            var allItems = await GetAllAsync();
+            if (allItems == null)
+            {
+                return new CategoryModel()
+                {
+                    MessageWhatWrong = "The database doesn't cotain any category"
+                };
+            }
+
+            var data = allItems.FirstOrDefault(i => i.Id == id);
+
+            if(data == null)
+            {
+                return new CategoryModel()
+                {
+                    MessageWhatWrong = "The category doesn't exist"
+                };
+            }
+
+            return data;
+        }
+
         public override async Task<CategoryModel> UpdateAsync(CategoryModel item)
         {
             if (item == null)

@@ -3,7 +3,7 @@ using CategoryData.Data.Models;
 using CategoryRepositories.RepositoriesMongo.Base;
 using MassTransit;
 
-namespace Bus.MassTransit.Consumers
+namespace CategoryBus.MassTransit.Consumers.LocalConsumers
 {
     public class CategoryUpdateConsumer : IConsumer<CategoryContractUpdate>
     {

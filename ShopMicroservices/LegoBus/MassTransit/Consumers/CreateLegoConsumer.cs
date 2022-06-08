@@ -23,7 +23,7 @@ namespace LegoBus.MassTransit.Consumers
                 Description = context.Message.Description,
                 Price = context.Message.Price,
                 isFavorite = context.Message.isFavorite,
-                Category = context.Message.Category
+                Category_Id = context.Message.Category_Id
             };
 
             var data = await _repository.AddAsync(lego);

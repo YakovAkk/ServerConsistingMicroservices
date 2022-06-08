@@ -135,7 +135,7 @@ namespace AccountRepository.RepositorySql
             if (id == null)
             {
                 var User = new UserModel();
-                User.MessageThatWrong = "Email was empty";
+                User.MessageThatWrong = "Id was empty";
                 return User;
             }
 
@@ -150,7 +150,6 @@ namespace AccountRepository.RepositorySql
 
             return result;
         }
-
         public override async Task<bool> isDataBaseHasUser(UserModel item)
         {
             if (item == null)
@@ -158,8 +157,7 @@ namespace AccountRepository.RepositorySql
                 return false;
             }
 
-            var result = await _db.Users.FirstOrDefaultAsync(u => (u.NickName == item.NickName)
-            || (u.Email == item.Email));
+            var result = await _db.Users.FirstOrDefaultAsync(u => u.Id == item.Id);
 
             return (result) == null ? false : true;
         }

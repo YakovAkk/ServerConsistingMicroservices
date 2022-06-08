@@ -23,15 +23,7 @@ namespace LegoRepository.RepositoriesMongo.Base
 
             return collection;
         }
-        public async virtual Task<T> GetByIDAsync(string id)
-        {
-            var item = await Collection.Find(new BsonDocument("_id", new ObjectId(id))).FirstOrDefaultAsync();
-            if (item == null)
-            {
-                return default(T);
-            }
-            return item;
-        }
+        public abstract Task<T> GetByIDAsync(string id);
         public abstract Task<T> DeleteAsync(string id);
         public abstract Task<T> AddAsync(T item);
         public abstract Task<T> UpdateAsync(T item);

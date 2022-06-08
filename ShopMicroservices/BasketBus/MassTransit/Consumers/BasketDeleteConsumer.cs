@@ -1,7 +1,6 @@
 ﻿using BasketBus.MassTransit.Contracts;
 using BasketData.Data.Base.Models;
 using BasketRepository.RepositoriesMongo.Base;
-using BasketRepository.RepositorySql.Base;
 using MassTransit;
 
 namespace BasketBus.MassTransit.Consumers
@@ -10,12 +9,10 @@ namespace BasketBus.MassTransit.Consumers
     {
         private readonly IBasketRepository _repository;
         private readonly IPublishEndpoint _publishEndpoint;
-        private readonly IUserRepository _userService;
-        public BasketDeleteConsumer(IBasketRepository repository, IPublishEndpoint publishEndpoint, IUserRepository userService)
+        public BasketDeleteConsumer(IBasketRepository repository, IPublishEndpoint publishEndpoint)
         {
             _repository = repository;
             _publishEndpoint = publishEndpoint;
-            _userService = userService;
         }
         public async Task Consume(ConsumeContext<BasketContractDelete> context)
         {

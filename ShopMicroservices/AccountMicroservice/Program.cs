@@ -12,6 +12,8 @@ using AccountMicroservice.RabbitMq;
 using AccountBus.MassTransit.Queues;
 using AccountBus.MassTransit.Consumers;
 using AccountBus.MassTransit.Contracts;
+using AccountBus.MassTransit.GlobalConsumers;
+using GlobalContracts.Queue;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,7 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<DeleteConsumer>();
     x.AddConsumer<RegistrationConsumer>();
     x.AddConsumer<UpdateConsumer>();
+    x.AddConsumer<IsUserExistConsumer>();
     x.UsingRabbitMq((ctx, config) =>
     {
         config.Host(RabbitMqConsts.RabbitMqRootUri + $"{RabbitMqConsts.VirtualHost}", h =>
@@ -34,6 +37,10 @@ builder.Services.AddMassTransit(x =>
             ep.ConfigureConsumer<DeleteConsumer>(ctx);
             ep.ConfigureConsumer<RegistrationConsumer>(ctx);
             ep.ConfigureConsumer<UpdateConsumer>(ctx);
+        });
+        config.ReceiveEndpoint(GlobalQueues.NotificationQueueNameIsUserExist, ep =>
+        {
+            ep.ConfigureConsumer<IsUserExistConsumer>(ctx);
         });
         config.AutoStart = true;
     });

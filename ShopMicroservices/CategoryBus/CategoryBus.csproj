@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CategoryRepositories\CategoryRepositories.csproj" />
+    <ProjectReference Include="..\GlobalContracts\GlobalContracts.csproj" />
   </ItemGroup>
 
 </Project>

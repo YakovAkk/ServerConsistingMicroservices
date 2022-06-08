@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit" Version="8.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\LegoBus\LegoBus.csproj" />
     <ProjectReference Include="..\LegoData\LegoData.csproj" />
     <ProjectReference Include="..\LegoRepository\LegoRepository.csproj" />

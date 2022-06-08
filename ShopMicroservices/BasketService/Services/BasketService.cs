@@ -28,28 +28,8 @@ namespace BasketService.Services
         {
             var model = new BasketContractCreate()
             {
-                Lego = new LegoModel()
-                { 
-                    Category = new CategoryModel()
-                    {
-                        Name = item.Lego.Category.Name,
-                        ImageUrl = item.Lego.Category.ImageUrl
-                    },
-                    Name = item.Lego.Name,
-                    ImageUrl = item.Lego.ImageUrl,
-                    Description = item.Lego.Description,
-                    Price = item.Lego.Price,
-                    isFavorite = item.Lego.isFavorite
-                },
-                User = new UserModel()
-                {
-                    Email = item.User.Email,
-                    Name = item.User.Name,
-                    NickName = item.User.NickName,
-                    DataRegistration = item.User.DataRegistration,
-                    Password = item.User.Password,
-                    RememberMe = item.User.RememberMe
-                },
+                Lego_Id = item.Lego_Id,
+                User_Id = item.User_Id,
                 Amount = item.Amount,
                 DateDeal = item.DateDeal
             };
@@ -67,8 +47,8 @@ namespace BasketService.Services
             return new BasketModel()
             {
                 Id = request.Message.Id,
-                Lego = request.Message.Lego,
-                User = request.Message.User,
+                Lego_Id = request.Message.Lego_Id,
+                User_Id = request.Message.User_Id,
                 Amount = request.Message.Amount,
                 DateDeal = request.Message.DateDeal,
                 MessageWhatWrong = request.Message.MessageWhatWrong
@@ -95,8 +75,8 @@ namespace BasketService.Services
             return new BasketModel()
             {
                 Id = response.Message.Id,
-                Lego = response.Message.Lego,
-                User = response.Message.User,
+                Lego_Id = response.Message.Lego_Id,
+                User_Id = response.Message.User_Id,
                 Amount = response.Message.Amount,
                 DateDeal = response.Message.DateDeal,
                 MessageWhatWrong = response.Message.MessageWhatWrong
@@ -107,28 +87,8 @@ namespace BasketService.Services
         {
             var model = new BasketContractUpdate()
             {
-                Lego = new LegoModel()
-                {
-                    Category = new CategoryModel()
-                    {
-                        Name = item.Lego.Category.Name,
-                        ImageUrl = item.Lego.Category.ImageUrl
-                    },
-                    Name = item.Lego.Name,
-                    ImageUrl = item.Lego.ImageUrl,
-                    Description = item.Lego.Description,
-                    Price = item.Lego.Price,
-                    isFavorite = item.Lego.isFavorite
-                },
-                User = new UserModel()
-                {
-                    Email = item.User.Email,
-                    Name = item.User.Name,
-                    NickName = item.User.NickName,
-                    DataRegistration = item.User.DataRegistration,
-                    Password = item.User.Password,
-                    RememberMe = item.User.RememberMe
-                },
+                Lego_Id = item.Lego_Id,
+                User_Id = item.User_Id,
                 Amount = item.Amount,
                 DateDeal = item.DateDeal
             };
@@ -145,8 +105,8 @@ namespace BasketService.Services
             return new BasketModel()
             {
                 Id = request.Message.Id,
-                Lego = request.Message.Lego,
-                User = request.Message.User,
+                Lego_Id = request.Message.Lego_Id,
+                User_Id = request.Message.User_Id,
                 Amount = request.Message.Amount,
                 DateDeal = request.Message.DateDeal,
                 MessageWhatWrong = request.Message.MessageWhatWrong

@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AccountRepository\AccountRepository.csproj" />
+    <ProjectReference Include="..\GlobalContracts\GlobalContracts.csproj" />
   </ItemGroup>
 
 </Project>

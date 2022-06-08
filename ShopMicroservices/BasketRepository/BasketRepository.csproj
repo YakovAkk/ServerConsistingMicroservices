@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit" Version="8.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BasketData\BasketData.csproj" />
+    <ProjectReference Include="..\GlobalContracts\GlobalContracts.csproj" />
   </ItemGroup>
 
 </Project>

@@ -9,6 +9,8 @@ using LegoBus.MassTransit.Contracts;
 using LegoMicroservice.RabbitMq;
 using LegoBus.MassTransit.Queues;
 using LegoService.Services.Base;
+using GlobalContracts.Queue;
+using LegoBus.MassTransit.GlobalConsumers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,7 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<CreateLegoConsumer>();
     x.AddConsumer<UpdateLegoConsumer>();
     x.AddConsumer<DeleteLegoConsumer>();
+    x.AddConsumer<IsLegoExistConsumer>();
     x.UsingRabbitMq((ctx, config) =>
     {
         config.Host(RabbitMqConsts.RabbitMqRootUri + $"{RabbitMqConsts.VirtualHost}", h =>
@@ -31,6 +34,10 @@ builder.Services.AddMassTransit(x =>
             ep.ConfigureConsumer<CreateLegoConsumer>(ctx);
             ep.ConfigureConsumer<UpdateLegoConsumer>(ctx);
             ep.ConfigureConsumer<DeleteLegoConsumer>(ctx);
+        });
+        config.ReceiveEndpoint(GlobalQueues.NotificationQueueNameIsLegoExist, ep =>
+        {
+            ep.ConfigureConsumer<IsLegoExistConsumer>(ctx);
         });
         config.AutoStart = true;
     });

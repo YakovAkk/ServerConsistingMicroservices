@@ -18,27 +18,28 @@ namespace LegoBus.MassTransit.Consumers
         {
             var lego = new LegoModel()
             {
+                Id = context.Message.Id,
                 Name = context.Message.Name,
                 ImageUrl = context.Message.ImageUrl,
                 Description = context.Message.Description,
                 Price = context.Message.Price,
                 isFavorite = context.Message.isFavorite,
-                Category = context.Message.Category
+                Category_Id = context.Message.Category_Id
             };
 
             var data = await _repository.UpdateAsync(lego);
 
             if (data != null)
             {
-                if (context.IsResponseAccepted<LegoContractCreate>())
+                if (context.IsResponseAccepted<LegoContractUpdate>())
                 {
                     await _publishEndpoint.Publish(data);
-                    await context.RespondAsync<LegoContractCreate>(data);
+                    await context.RespondAsync<LegoContractUpdate>(data);
                 }
             }
             else
             {
-                var userResponce = new LegoContractCreate()
+                var userResponce = new LegoContractUpdate()
                 {
                     MessageWhatWrong = "Incorrect creditals" 
                 };
