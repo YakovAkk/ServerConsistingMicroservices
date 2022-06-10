@@ -3,13 +3,11 @@ using SendToMailServices.Services.Base;
 using MassTransit;
 using SendToMailBus.MassTransit.Consumers;
 using SendToMailApi.RabbitMq;
-using SendToMailBus.MassTransit.Queues;
-using SendToMailBus.MassTransit.Contracts;
+using GlobalContracts.Queue;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<SendToMailConsumer>();
@@ -20,15 +18,12 @@ builder.Services.AddMassTransit(x =>
             h.Username(RabbitMqConsts.UserName);
             h.Password(RabbitMqConsts.Password);
         });
-        config.ReceiveEndpoint(SendToMailContractsQueue.NotificationQueueSendToMail, ep =>
+        config.ReceiveEndpoint(GlobalQueues.NotificationQueueNameSendMail, ep =>
         {
             ep.ConfigureConsumer<SendToMailConsumer>(ctx);
-
         });
         config.AutoStart = true;
     });
-    x.AddRequestClient<SendToMailContract>();
-
 });
 
 builder.Services.AddTransient<ISendToMailService, SendToMailService>();
@@ -46,6 +41,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(options =>
+{
+    options.
+    AllowAnyMethod().
+    AllowAnyHeader().
+    SetIsOriginAllowed(origin => true).
+    AllowCredentials();
+
+});
 
 app.UseHttpsRedirection();
 

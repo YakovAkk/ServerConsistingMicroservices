@@ -8,6 +8,5 @@ namespace ShopMicroservices.ApiModels
         public string Lego_Id { get; set; }
         public string User_Id { get; set; }
         public uint Amount { get; set; }
-        public DateTime DateDeal { get; set; }
     }
 }

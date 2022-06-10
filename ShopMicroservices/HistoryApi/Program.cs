@@ -1,5 +1,6 @@
 using GlobalContracts.Queue;
 using HistoryApi.RabbitMq;
+using HistoryBus.MassTransit.Consumers.GlobalConsumers;
 using HistoryBus.MassTransit.Consumers.LocalConsumers;
 using HistoryBus.MassTransit.Contracts;
 using HistoryBus.MassTransit.Queues;
@@ -19,6 +20,7 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<CreateHistoryConsumer>();
     x.AddConsumer<UpdateHistoryConsumer>();
     x.AddConsumer<DeleteHistoryConsumer>();
+    x.AddConsumer<AddToHistoryConsumer>();
     x.UsingRabbitMq((ctx, config) =>
     {
         config.Host(RabbitMqConsts.RabbitMqRootUri + $"{RabbitMqConsts.VirtualHost}", h =>
@@ -31,6 +33,10 @@ builder.Services.AddMassTransit(x =>
             ep.ConfigureConsumer<CreateHistoryConsumer>(ctx);
             ep.ConfigureConsumer<UpdateHistoryConsumer>(ctx);
             ep.ConfigureConsumer<DeleteHistoryConsumer>(ctx);
+        });
+        config.ReceiveEndpoint(GlobalQueues.NotificationQueueNameAddToHistory, ep =>
+        {
+            ep.ConfigureConsumer<AddToHistoryConsumer>(ctx);
         });
         config.AutoStart = true;
     });

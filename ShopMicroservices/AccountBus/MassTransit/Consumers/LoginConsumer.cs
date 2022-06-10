@@ -28,35 +28,49 @@ namespace AccountBus.MassTransit.Consumers
             }
             else
             {
-                var user = new UserModel()
+                var userModel = new UserModel()
                 {
-                    Name = context.Message.Email,
+                    Id = context.Message.Id,
+                    Name = context.Message.Name,
+                    NickName = context.Message.Name,
                     Email = context.Message.Email,
                     Password = context.Message.Password,
-                    RememberMe = context.Message.RememberMe
+                    DataRegistration = context.Message.DataRegistration,
+                    RememberMe = context.Message.RememberMe,
+                    MessageThatWrong = context.Message.MessageThatWrong
                 };
+                var user = await _accountRepository.FindUserByEmailAsync(userModel.Email);
 
-                var result = await _accountRepository.LoginAsync(user);
-
-                if (result != null)
-                {
-                    if (context.IsResponseAccepted<AccountContractLogin>())
-                    {
-                        await _publishEndpoint.Publish(result);
-                        await context.RespondAsync<AccountContractLogin>(result);
-                    }
-                }
-                else
+                if (user == null)
                 {
                     var userResponce = new AccountContractLogin()
                     {
-                        MessageThatWrong = "Incorrect creditals"
+                        MessageThatWrong = "The database doesn't contain the user"
                     };
                     await _publishEndpoint.Publish(userResponce);
                 }
+                else 
+                {
+                    var result = await _accountRepository.LoginAsync(user);
+
+                    if (result != null)
+                    {
+                        if (context.IsResponseAccepted<AccountContractLogin>())
+                        {
+                            await _publishEndpoint.Publish(result);
+                            await context.RespondAsync<AccountContractLogin>(result);
+                        }
+                    }
+                    else
+                    {
+                        var userResponce = new AccountContractLogin()
+                        {
+                            MessageThatWrong = "Incorrect creditals"
+                        };
+                        await _publishEndpoint.Publish(userResponce);
+                    }
+                }
             }
-           
-            
         }
     }
 }

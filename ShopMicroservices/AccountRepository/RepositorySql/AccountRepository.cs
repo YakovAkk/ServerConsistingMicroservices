@@ -29,7 +29,7 @@ namespace AccountRepository.RepositorySql
             }
             var user = new IdentityUser()
             {
-                UserName = item.Name,
+                UserName = item.Email,
                 Email = item.Email
             };
 
@@ -164,27 +164,20 @@ namespace AccountRepository.RepositorySql
 
         public override async Task<UserModel> LoginAsync(UserModel item)
         {
-            var result = await _signInManager.PasswordSignInAsync(item.Name,
-                        item.Password, item.RememberMe, false);
+            //var result = await _signInManager.PasswordSignInAsync(item.Email,
+            //         item.Password, item.RememberMe, false);
 
-            if (result.Succeeded)
+            var result = await FindUserByEmailAsync(item.Email);
+
+            if (result != null)
             {
-                var user = await _db.Users.FirstOrDefaultAsync(u => u.Name == item.Name);
-
-                if (user == null)
-                {
-                    var User = new UserModel();
-                    User.MessageThatWrong = "The user hasn't contained in database";
-                    return User;
-                }
-
-                return user;
+                return result;
             }
             else
             {
 
                 var User = new UserModel();
-                User.MessageThatWrong = "The user hasn't contained in database";
+                User.MessageThatWrong = "The user doesn't contained in database";
                 return User;
 
             }

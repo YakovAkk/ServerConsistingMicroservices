@@ -22,6 +22,8 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<BasketUpdateConsumer>();
     x.AddConsumer<BasketDeleteConsumer>();
     x.AddConsumer<IsBasketExistConsumer>();
+    x.AddConsumer<DeleteFromBasketByIdConsumer>();
+    x.AddConsumer<GetBasketItemByIdConsumer>();
     x.UsingRabbitMq((ctx, config) =>
     {
         config.Host(RabbitMqConsts.RabbitMqRootUri + $"{RabbitMqConsts.VirtualHost}", h =>
@@ -38,6 +40,14 @@ builder.Services.AddMassTransit(x =>
         config.ReceiveEndpoint(GlobalQueues.NotificationQueueNameIsBasketExist, ep =>
         {
             ep.ConfigureConsumer<IsBasketExistConsumer>(ctx);
+        });
+        config.ReceiveEndpoint(GlobalQueues.NotificationQueueNameDeleteFromBasketById, ep =>
+        {
+            ep.ConfigureConsumer<DeleteFromBasketByIdConsumer>(ctx);
+        });
+        config.ReceiveEndpoint(GlobalQueues.NotificationQueueNameGetBasketItemById, ep =>
+        {
+            ep.ConfigureConsumer<GetBasketItemByIdConsumer>(ctx);
         });
         config.AutoStart = true;
     });

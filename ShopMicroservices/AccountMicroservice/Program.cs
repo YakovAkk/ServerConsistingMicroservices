@@ -24,6 +24,7 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<DeleteConsumer>();
     x.AddConsumer<RegistrationConsumer>();
     x.AddConsumer<UpdateConsumer>();
+    x.AddConsumer<LoginConsumer>();
     x.AddConsumer<IsUserExistConsumer>();
     x.UsingRabbitMq((ctx, config) =>
     {
@@ -37,6 +38,7 @@ builder.Services.AddMassTransit(x =>
             ep.ConfigureConsumer<DeleteConsumer>(ctx);
             ep.ConfigureConsumer<RegistrationConsumer>(ctx);
             ep.ConfigureConsumer<UpdateConsumer>(ctx);
+            ep.ConfigureConsumer<LoginConsumer>(ctx);
         });
         config.ReceiveEndpoint(GlobalQueues.NotificationQueueNameIsUserExist, ep =>
         {

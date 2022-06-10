@@ -1,11 +1,11 @@
-﻿using MassTransit;
-using SendToMailBus.MassTransit.Contracts;
+﻿using GlobalContracts.Contracts;
+using MassTransit;
 using SendToMailServices.Model;
 using SendToMailServices.Services.Base;
 
 namespace SendToMailBus.MassTransit.Consumers
 {
-    public class SendToMailConsumer : IConsumer<SendToMailContract>
+    public class SendToMailConsumer : IConsumer<SendEmailContract>
     {
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly ISendToMailService _sendToMailService;
@@ -14,38 +14,36 @@ namespace SendToMailBus.MassTransit.Consumers
             _publishEndpoint = publishEndpoint;
             _sendToMailService = sendToMailService;
         }
-        public async Task Consume(ConsumeContext<SendToMailContract> context)
+        public async Task Consume(ConsumeContext<SendEmailContract> context)
         {
             var request = new MailRequest()
             {
                 ToEmail = context.Message.ToEmail,
                 Subject = context.Message.Subject,
                 Body = context.Message.Body,
-                Attachments = context.Message.Attachments
             };
 
             var responce = await _sendToMailService.SendToMailAsync(request);
 
-            var data = new SendToMailContract()
+            var data = new SendEmailContract()
             {
                 ToEmail = context.Message.ToEmail,
                 Subject = context.Message.Subject,
                 Body = context.Message.Body,
-                Attachments = context.Message.Attachments,
                 MessageWhatWrong = null
             };
 
             if (responce != null)
             {
-                if (context.IsResponseAccepted<SendToMailContract>())
+                if (context.IsResponseAccepted<SendEmailContract>())
                 {
                     await _publishEndpoint.Publish(data);
-                    await context.RespondAsync<SendToMailContract>(data);
+                    await context.RespondAsync<SendEmailContract>(data);
                 }
             }
             else
             {
-                var userResponce = new SendToMailContract()
+                var userResponce = new SendEmailContract()
                 {
                     MessageWhatWrong = "Incorrect creditals"
                 };

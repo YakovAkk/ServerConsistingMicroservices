@@ -37,7 +37,9 @@ namespace AccountService.Services
         {
             var user = new AccountContractLogin()
             {
-                Email = item.Email
+                Email = item.Email,
+                Password = item.Password,
+                RememberMe = item.RememberMe
             };
 
             var response = await _clientLogin.GetResponse<AccountContractLogin>(user);

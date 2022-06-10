@@ -1,13 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace SendToMailBus.MassTransit.Contracts
+namespace GlobalContracts.Contracts
 {
-    public class SendToMailContract
+    public class SendEmailContract
     {
         public string ToEmail { get; set; }
         public string Subject { get; set; }
         public string Body { get; set; }
-        public List<IFormFile> Attachments { get; set; }
         public string MessageWhatWrong { get; set; }
+
+        public SendEmailContract()
+        {
+           
+        }
     }
 }

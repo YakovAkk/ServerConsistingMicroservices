@@ -38,7 +38,7 @@ namespace HistoryService.Services
             {
                 Id = response.Message.Id,
                 User_Id = response.Message.User_Id,
-                Orders_Id = response.Message.Orders_Id,
+                Orders = response.Message.Orders,
                 MessageWhatWrong = response.Message.MessageWhatWrong
             };
         }
@@ -64,7 +64,7 @@ namespace HistoryService.Services
             {
                 Id = response.Message.Id,
                 User_Id = response.Message.User_Id,
-                Orders_Id = response.Message.Orders_Id,
+                Orders = response.Message.Orders,
                 MessageWhatWrong = response.Message.MessageWhatWrong
             };
         }
@@ -85,7 +85,7 @@ namespace HistoryService.Services
             {
                 Id = response.Message.Id,
                 User_Id = response.Message.User_Id,
-                Orders_Id = response.Message.Orders_Id,
+                Orders = response.Message.Orders,
                 MessageWhatWrong = response.Message.MessageWhatWrong
             };
         }

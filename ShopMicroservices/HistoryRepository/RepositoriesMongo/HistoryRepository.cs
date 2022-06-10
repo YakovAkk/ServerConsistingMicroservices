@@ -49,10 +49,10 @@ namespace HistoryRepository.RepositoriesMongo
                 return responce;
             }
 
-            res.Orders_Id.AddRange(item.Orders_Id);
+            res.Orders.AddRange(item.Orders);
 
             var result = await Collection.UpdateOneAsync(i => i.Id == res.Id, Builders<HistoryModel>.Update
-                .Set(o => o.Orders_Id, res.Orders_Id));
+                .Set(o => o.Orders, res.Orders));
 
             return res;
         }
@@ -130,10 +130,10 @@ namespace HistoryRepository.RepositoriesMongo
                 return responce;
             }
 
-            res.Orders_Id.AddRange(item.Orders_Id);
+            res.Orders.AddRange(item.Orders);
 
             var result = await Collection.UpdateOneAsync(i => i.Id == res.Id, Builders<HistoryModel>.Update
-                .Set(o => o.Orders_Id, res.Orders_Id));
+                .Set(o => o.Orders, res.Orders));
 
             return res;
         }

@@ -31,7 +31,6 @@ namespace BasketService.Services
                 Lego_Id = item.Lego_Id,
                 User_Id = item.User_Id,
                 Amount = item.Amount,
-                DateDeal = item.DateDeal
             };
 
             var request = await _clientCreate.GetResponse<BasketContractCreate>(model);
@@ -90,8 +89,7 @@ namespace BasketService.Services
                 Id = item.Id,
                 Lego_Id = item.Lego_Id,
                 User_Id = item.User_Id,
-                Amount = item.Amount,
-                DateDeal = item.DateDeal
+                Amount = item.Amount
             };
             var request = await _clientUpdate.GetResponse<BasketContractUpdate>(model);
 
